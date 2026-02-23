@@ -49,7 +49,7 @@ export default function HeroSection() {
             <a href="tel:+447903753797" data-testid="hero-call-btn">
               <Button className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 animate-pulse-glow">
                 <Phone className="w-5 h-5 mr-2" />
-                Call Now
+                Call Now!
               </Button>
             </a>
             <Button
