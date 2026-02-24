@@ -57,18 +57,18 @@ export default function ServicesSection() {
     <section
       id="services"
       data-testid="services-section"
-      className="py-16 md:py-24 bg-gray-50"
+      className="section-padding bg-white"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          <span className="text-sm font-semibold uppercase tracking-wider text-yellow-600 mb-4 block">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-sm font-bold uppercase tracking-widest text-yellow-500 mb-4 block">
             Our Services
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-800 tracking-tight mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-black tracking-tight mb-4">
             Professional Plumbing & Heating Solutions
           </h2>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-black leading-relaxed">
             From emergency repairs to new installations, we offer a complete range of services to keep your home comfortable and safe.
           </p>
         </div>
@@ -79,15 +79,15 @@ export default function ServicesSection() {
             <div
               key={index}
               data-testid={`service-card-${index}`}
-              className="service-card bg-white p-8 rounded-xl shadow-sm hover:shadow-lg border border-gray-100 group cursor-pointer"
+              className="service-card group cursor-pointer"
             >
-              <div className="service-icon w-14 h-14 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-5 transition-transform">
-                <service.icon className="w-7 h-7 text-yellow-600" strokeWidth={1.5} />
+              <div className="service-icon">
+                <service.icon strokeWidth={1.5} />
               </div>
-              <h3 className="font-heading text-xl font-semibold text-gray-800 mb-3 group-hover:text-yellow-600 transition-colors">
+              <h3 className="font-heading text-xl font-bold text-black mb-3 group-hover:text-yellow-600 transition-colors">
                 {service.title}
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-black text-sm leading-relaxed">
                 {service.description}
               </p>
             </div>
@@ -95,14 +95,14 @@ export default function ServicesSection() {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
+        <div className="text-center mt-14">
+          <p className="text-black mb-4">
             Need a service not listed? We handle all plumbing and heating needs.
           </p>
           <a
             href="tel:+447903753797"
             data-testid="services-call-btn"
-            className="inline-flex items-center text-yellow-600 hover:text-yellow-700 font-semibold transition-colors"
+            className="inline-flex items-center text-yellow-500 hover:text-yellow-600 font-bold transition-colors"
           >
             Call us to discuss your requirements →
           </a>

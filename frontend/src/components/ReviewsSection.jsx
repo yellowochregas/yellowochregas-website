@@ -55,25 +55,25 @@ export default function ReviewsSection() {
     <section
       id="reviews"
       data-testid="reviews-section"
-      className="py-16 md:py-24 bg-white"
+      className="section-padding bg-gray-50"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          <span className="text-sm font-semibold uppercase tracking-wider text-yellow-600 mb-4 block">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-sm font-bold uppercase tracking-widest text-yellow-500 mb-4 block">
             Customer Reviews
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-800 tracking-tight mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-black tracking-tight mb-4">
             What Our Customers Say
           </h2>
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-6 h-6 text-yellow-500 fill-yellow-500" />
               ))}
             </div>
-            <span className="text-gray-800 font-semibold">5.0</span>
-            <span className="text-gray-600">(166 Reviews on Google)</span>
+            <span className="text-black font-bold text-lg">5.0</span>
+            <span className="text-black">(166 Reviews on Google)</span>
           </div>
         </div>
 
@@ -90,10 +90,10 @@ export default function ReviewsSection() {
               <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
                 <div
                   data-testid={`review-card-${review.id}`}
-                  className="review-card bg-gray-50 p-6 rounded-xl border border-gray-200 h-full relative"
+                  className="review-card h-full"
                 >
                   {/* Quote Icon */}
-                  <Quote className="w-10 h-10 text-yellow-500/20 absolute top-4 right-4" />
+                  <Quote className="w-10 h-10 text-yellow-500 opacity-20 absolute top-4 right-4" />
                   
                   {/* Rating Stars */}
                   <div className="flex gap-1 mb-4">
@@ -103,20 +103,20 @@ export default function ReviewsSection() {
                   </div>
                   
                   {/* Review Text */}
-                  <p className="text-gray-700 leading-relaxed mb-6 relative z-10">
+                  <p className="text-black leading-relaxed mb-6 relative z-10">
                     "{review.text}"
                   </p>
                   
                   {/* Reviewer Name */}
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                      <span className="text-gray-900 font-bold text-sm">
+                      <span className="text-black font-bold text-sm">
                         {review.name.charAt(0)}
                       </span>
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">{review.name}</p>
-                      <p className="text-sm text-gray-500">Verified Customer</p>
+                      <p className="font-bold text-black">{review.name}</p>
+                      <p className="text-sm text-black">Verified Customer</p>
                     </div>
                   </div>
                 </div>
@@ -125,22 +125,22 @@ export default function ReviewsSection() {
           </CarouselContent>
           <CarouselPrevious 
             data-testid="reviews-prev-btn"
-            className="hidden md:flex -left-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 border-0" 
+            className="hidden md:flex -left-12 bg-yellow-500 hover:bg-yellow-600 text-black border-0" 
           />
           <CarouselNext 
             data-testid="reviews-next-btn"
-            className="hidden md:flex -right-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 border-0" 
+            className="hidden md:flex -right-12 bg-yellow-500 hover:bg-yellow-600 text-black border-0" 
           />
         </Carousel>
 
         {/* Google Reviews Link */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-12">
           <a
-            href="https://www.google.com/search?q=yellow+ochre+gas"
+            href="https://www.google.com/search?q=yellow+ochre+gas+barking"
             target="_blank"
             rel="noopener noreferrer"
             data-testid="google-reviews-link"
-            className="inline-flex items-center text-yellow-600 hover:text-yellow-700 font-semibold transition-colors"
+            className="inline-flex items-center text-yellow-500 hover:text-yellow-600 font-bold transition-colors"
           >
             View all reviews on Google →
           </a>

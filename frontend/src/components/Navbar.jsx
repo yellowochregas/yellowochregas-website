@@ -26,8 +26,8 @@ export default function Navbar({ scrolled }) {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur shadow-md"
-          : "bg-white"
+          ? "navbar-white navbar-scrolled"
+          : "bg-white border-b border-gray-100"
       }`}
     >
       <nav className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -43,11 +43,11 @@ export default function Navbar({ scrolled }) {
             }}
           >
             <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-              <span className="font-heading font-bold text-gray-900 text-lg">YOG</span>
+              <span className="font-heading font-bold text-black text-lg">YO</span>
             </div>
             <div className="hidden sm:block">
-              <span className="font-heading font-bold text-gray-800 text-lg">Yellow Ochre</span>
-              <span className="font-heading text-yellow-600 text-lg ml-1">Gas</span>
+              <span className="font-heading font-bold text-black text-xl">Yellow Ochre</span>
+              <span className="font-heading text-yellow-500 text-xl ml-1">Gas</span>
             </div>
           </a>
 
@@ -58,7 +58,7 @@ export default function Navbar({ scrolled }) {
                 key={link.href}
                 data-testid={`nav-link-${link.label.toLowerCase()}`}
                 onClick={() => scrollToSection(link.href)}
-                className="text-gray-700 hover:text-yellow-600 font-medium transition-colors"
+                className="nav-link text-black font-semibold text-sm uppercase tracking-wide"
               >
                 {link.label}
               </button>
@@ -68,7 +68,7 @@ export default function Navbar({ scrolled }) {
           {/* CTA Button - Desktop */}
           <div className="hidden md:flex items-center gap-3">
             <a href="tel:+447903753797" data-testid="navbar-call-btn">
-              <Button className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold rounded-full px-6">
+              <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full px-6 py-5 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5">
                 <Phone className="w-4 h-4 mr-2" />
                 Call Now
               </Button>
@@ -77,8 +77,8 @@ export default function Navbar({ scrolled }) {
 
           {/* Mobile Menu */}
           <div className="flex md:hidden items-center gap-2">
-            <a href="tel:+447593217699" data-testid="navbar-call-btn-mobile">
-              <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-full">
+            <a href="tel:+447903753797" data-testid="navbar-call-btn-mobile">
+              <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black rounded-full shadow-md">
                 <Phone className="w-4 h-4" />
               </Button>
             </a>
@@ -89,20 +89,20 @@ export default function Navbar({ scrolled }) {
                   data-testid="mobile-menu-btn"
                   variant="ghost"
                   size="icon"
-                  className="text-gray-800"
+                  className="text-black hover:bg-gray-100"
                 >
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[280px] bg-white">
                 <div className="flex flex-col gap-6 mt-8">
-                  <div className="flex items-center gap-2 pb-4 border-b">
+                  <div className="flex items-center gap-2 pb-4 border-b border-gray-100">
                     <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                      <span className="font-heading font-bold text-gray-900 text-lg">YOG</span>
+                      <span className="font-heading font-bold text-black text-lg">YO</span>
                     </div>
                     <div>
-                      <span className="font-heading font-bold text-gray-800">Yellow Ochre</span>
-                      <span className="font-heading text-yellow-600 ml-1">Gas</span>
+                      <span className="font-heading font-bold text-black">Yellow Ochre</span>
+                      <span className="font-heading text-yellow-500 ml-1">Gas</span>
                     </div>
                   </div>
                   
@@ -111,14 +111,14 @@ export default function Navbar({ scrolled }) {
                       key={link.href}
                       data-testid={`mobile-nav-${link.label.toLowerCase()}`}
                       onClick={() => scrollToSection(link.href)}
-                      className="text-left text-lg text-gray-700 hover:text-yellow-600 font-medium transition-colors"
+                      className="text-left text-lg text-black hover:text-yellow-500 font-semibold transition-colors"
                     >
                       {link.label}
                     </button>
                   ))}
                   
                   <a href="tel:+447903753797" className="mt-4">
-                    <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold rounded-full">
+                    <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-full shadow-md">
                       <Phone className="w-4 h-4 mr-2" />
                       +44 7593 217699
                     </Button>

@@ -12,7 +12,7 @@ const services = [
 ];
 
 const areas = [
-  "Braintree",
+  "Barking",
   "Dagenham",
   "Colchester",
   "Greater London"
@@ -29,7 +29,7 @@ export default function Footer() {
   };
 
   return (
-    <footer data-testid="footer" className="bg-gray-900 text-white">
+    <footer data-testid="footer" className="footer-dark">
       {/* Main Footer */}
       <div className="container mx-auto px-4 md:px-6 max-w-7xl py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -37,7 +37,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                <span className="font-heading font-bold text-gray-900 text-lg">YO</span>
+                <span className="font-heading font-bold text-black text-lg">YO</span>
               </div>
               <div>
                 <span className="font-heading font-bold text-white">Yellow Ochre</span>
@@ -63,13 +63,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-6">Our Services</h4>
+            <h4 className="font-heading text-lg font-bold text-white mb-6">Our Services</h4>
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
                   <button
                     onClick={() => scrollToSection("#services")}
-                    className="text-gray-400 hover:text-yellow-500 text-sm transition-colors"
+                    className="footer-link text-sm transition-colors"
                   >
                     {service}
                   </button>
@@ -80,13 +80,13 @@ export default function Footer() {
 
           {/* Service Areas */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-6">Service Areas</h4>
+            <h4 className="font-heading text-lg font-bold text-white mb-6">Service Areas</h4>
             <ul className="space-y-3">
               {areas.map((area, index) => (
                 <li key={index}>
                   <button
                     onClick={() => scrollToSection("#areas")}
-                    className="text-gray-400 hover:text-yellow-500 text-sm transition-colors flex items-center gap-2"
+                    className="footer-link text-sm transition-colors flex items-center gap-2"
                   >
                     <MapPin className="w-4 h-4" />
                     {area}
@@ -98,7 +98,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-6">Contact Us</h4>
+            <h4 className="font-heading text-lg font-bold text-white mb-6">Contact Us</h4>
             <div className="space-y-4">
               <a
                 href="tel:+447903753797"
@@ -110,7 +110,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm">Call Us</p>
-                  <p className="font-semibold text-white">+44 7593 217699</p>
+                  <p className="font-bold text-white">+44 7903 753797</p>
                 </div>
               </a>
 
@@ -120,7 +120,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm">Location</p>
-                  <p className="font-semibold text-white">Braintree CM7 3DP</p>
+                  <p className="font-bold text-white">Barking IG11 0QA</p>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm">Availability</p>
-                  <p className="font-semibold text-white">Open 24/7</p>
+                  <p className="font-bold text-white">Open 24/7</p>
                 </div>
               </div>
             </div>
