@@ -121,7 +121,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm">Location</p>
-                  <p className="font-bold text-white">Braintree CM7 3DP</p>
+                  <p className="font-bold text-white">Braintre CM7 3DP</p>
                 </div>
               </div>
 
