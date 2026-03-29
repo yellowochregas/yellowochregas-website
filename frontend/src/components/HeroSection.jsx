@@ -14,25 +14,27 @@ export default function HeroSection() {
     >
       {/* Layer 1: Background Image - Enhanced Contrast */}
       <div 
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 hero-bg"
         style={{
-          backgroundImage: "url('https://customer-assets.emergentagent.com/job_yellow-gas-pro/artifacts/ll9ta1gq_IMG_3934.JPG')",
+          backgroundImage: "url('/images/gas-engineer-at-work-in-kitchen.png')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "70% center",
           backgroundRepeat: "no-repeat",
-          filter: "contrast(1.25) brightness(1.05) saturate(1.1)",
-          transform: "scale(1.02)"
+          filter: "contrast(1.35) brightness(0.95) saturate(1.15)",
         }}
       />
       
+      {/* Subtle dark overlay for depth */}
+      <div className="absolute inset-0 z-5 bg-black/10" />
+
       {/* Layer 2: Subtle overlay for text readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/90 via-white/75 to-white/30" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/95 via-white/85 to-transparent" />
       
       {/* Layer 3: Content Container */}
-      <div className="relative z-20 container mx-auto px-4 md:px-6 max-w-7xl py-16 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="relative z-20 container mx-auto px-4 sm:px-6 max-w-7xl py-12 sm:py-16 md:py-20">
+        <div className="grid grid-cols-1 gap-8 items-center">
           {/* Left Column: Text Content */}
-          <div className="order-2 lg:order-1">
+          <div className="text-center max-w-3xl mx-auto">
             {/* Trust Badges */}
             <div className="flex flex-wrap items-center gap-3 mb-8 animate-fade-in-up">
               <div className="trust-badge flex items-center gap-2 bg-white/95 backdrop-blur-sm shadow-md border border-gray-100">
@@ -54,8 +56,8 @@ export default function HeroSection() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-black uppercase tracking-tight mb-6 animate-fade-in-up animation-delay-200">
-              24/7 Reliable Plumbing & Heating Services in Greater London
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase tracking-tight mb-6 animate-fade-in-up animation-delay-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+              Trusted 24/7 Plumbing & Heating Experts in Greater London
             </h1>
 
             {/* Subtext */}
@@ -64,9 +66,9 @@ export default function HeroSection() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-400">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 animate-fade-in-up animation-delay-400">
               <a href="tel:+447903753797" data-testid="hero-call-btn">
-                <Button className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <Button className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-6 py-5 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-105">
                   <Phone className="w-5 h-5 mr-2" />
                   Call Now
                 </Button>
@@ -74,14 +76,13 @@ export default function HeroSection() {
               <Button
                 data-testid="hero-quote-btn\"
                 onClick={scrollToContact}
-                className="w-full sm:w-auto bg-white/95 backdrop-blur-sm border-2 border-yellow-500 text-black hover:bg-yellow-500 font-semibold px-8 py-6 text-lg rounded-full transition-all hover:-translate-y-1 shadow-md\"
-              >
+                className="w-full sm:w-auto bg-white/95 backdrop-blur-sm border-2 border-yellow-500 text-black hover:bg-yellow-500 font-semibold px-6 py-5 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full transition-all hover:-translate-y-1 shadow-md">
                 Get a Free Quote
               </Button>
             </div>
 
             {/* Contact Info */}
-            <div className="mt-12 flex flex-col sm:flex-row gap-6 text-black">
+            <div className="mt-8 sm:mt-12 flex flex-col gap-4 sm:flex-row sm:gap-6 text-black">
               <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-md border border-gray-100">
                 <Phone className="w-5 h-5 text-yellow-500" />
                 <span className="font-bold text-lg">+44 7593 217699</span>
@@ -93,13 +94,13 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Column: Branded Image as Foreground Element */}
+          {/* Right Column: Branded Image as Foreground Element 
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in-up">
             <div className="relative">
-              {/* Decorative glow behind the image */}
+               Decorative glow behind the image 
               <div className="absolute -inset-6 bg-yellow-500/30 rounded-3xl blur-3xl" />
               
-              {/* Branded Image as foreground card */}
+               Branded Image as foreground card 
               <div 
                 className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/80"
                 style={{
@@ -114,7 +115,7 @@ export default function HeroSection() {
                 />
               </div>
               
-              {/* Floating badge on image */}
+               Floating badge on image 
               <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-black font-bold px-5 py-3 rounded-xl shadow-lg">
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5" />
@@ -122,17 +123,17 @@ export default function HeroSection() {
                 </div>
               </div>
               
-              {/* Additional floating element */}
+               Additional floating element 
               <div className="absolute -top-3 -right-3 bg-white text-black font-bold px-4 py-2 rounded-lg shadow-lg border border-yellow-500">
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                   <span className="text-sm">5.0 Rating</span>
                 </div>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
-      </div>
+      {/*</div>*/}
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 scroll-indicator">
