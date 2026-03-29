@@ -16,7 +16,7 @@ export default function HeroSection() {
       <div 
         className="absolute inset-0 z-0 hero-bg"
         style={{
-          backgroundImage: "url('/images/gas-engineer-at-work-in-kitchen.png')",
+          backgroundImage: "url('/images/Gas-engineer-at-work-in-kitchen.png')",
           backgroundSize: "cover",
           backgroundPosition: "70% center",
           backgroundRepeat: "no-repeat",
