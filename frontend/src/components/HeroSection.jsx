@@ -76,7 +76,7 @@ export default function HeroSection() {
               <Button
                 data-testid="hero-quote-btn\"
                 onClick={scrollToContact}
-                className="w-full sm:w-auto bg-white/95 backdrop-blur-sm border-2 border-yellow-500 text-black hover:bg-yellow-500 font-semibold px-6 py-5 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full transition-all hover:-translate-y-1 shadow-md">
+                className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-6 py-5 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-105">
                 Get a Free Quote
               </Button>
             </div>
