@@ -40,7 +40,7 @@ const services = [
   },
   {
     icon: Bath,
-    title: "Bathroom Tap",
+    title: "Bathroom Taps",
     description: "CP12 certificates for landlords. Competitive rates and fast turnaround.",
     details: [
       "Find a Qualified Engineer",
@@ -189,18 +189,15 @@ export default function ServicesSection() {
         </div>
       </div>
     </section>
-      
      {selectedService && (
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50"
-      onClick={() => setSelectedService(null)}
-      >
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
         <div
-          className="bg-white w-full max-w-lg rounded-t-3xl p-6 relative max-h-[90vh] overflow-y-auto"
+          className="bg-white rounded-2xl max-w-lg w-full p-6 relative animate-fade-in-up"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Handle Bar */}
           <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
-
+          
           {/* Close Button */}
           <button
             onClick={() => setSelectedService(null)}
@@ -209,17 +206,14 @@ export default function ServicesSection() {
             ✕
           </button>
 
-          {/* Title */}
           <h3 className="text-2xl font-bold mb-4">
             {selectedService.title}
           </h3>
-          
-          {/* Description */}
+
           <p className="text-gray-700 mb-4">
             {selectedService.description}
           </p>
 
-          {/* Details */}
           <ul className="space-y-2 mb-6">
             {selectedService.details.map((item, i) => (
               <li key={i} className="flex items-start gap-2">
@@ -228,8 +222,7 @@ export default function ServicesSection() {
               </li>
             ))}
           </ul>
-          
-          {/* CTA */}
+
           <div className="flex flex-col sm:flex-row gap-3">
             <a
               href="tel:+447903753797"
