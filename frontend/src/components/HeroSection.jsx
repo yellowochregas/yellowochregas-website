@@ -57,7 +57,7 @@ export default function HeroSection() {
 
             {/* Main Headline */}
             <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black uppercase tracking-tight mb-6 animate-fade-in-up animation-delay-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
-              Trusted 24/7 Plumbing & Heating Experts in Greater London
+              Trusted Plumbing & Heating Experts in Greater London
             </h1>
 
             {/* Subtext */}

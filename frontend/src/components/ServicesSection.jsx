@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { 
-  Flame, 
-  Wrench, 
-  FileCheck, 
-  UtensilsCrossed, 
+import {  
+  Heater, 
+  ShowerHead, 
+  Bath, 
   Droplets, 
-  AlertTriangle,
-  Wind,
-  Settings
+  Radiation,
+  Settings,
+  SquareDashedKanban,
 } from "lucide-react";
 
 const services = [
   {
-    icon: Flame,
-    title: "Boiler Installation",
+    icon: SquareDashedKanban,
+    title: "Boiler",
     description: "Expert installation of new gas boilers with full warranty and aftercare support.",
     featured: true,
     details: [
@@ -24,8 +23,8 @@ const services = [
     ]
   },
   {
-    icon: Wrench,
-    title: "Boiler Repair & Servicing",
+    icon: Heater,
+    title: "Hot Water",
     description: "Fast diagnosis and repair of all boiler makes. Annual servicing available.",
     details: [
       "Safe Isolation",
@@ -40,8 +39,8 @@ const services = [
     ]
   },
   {
-    icon: FileCheck,
-    title: "Landlord Gas Safety Certificates",
+    icon: Bath,
+    title: "Bathroom Tap",
     description: "CP12 certificates for landlords. Competitive rates and fast turnaround.",
     details: [
       "Find a Qualified Engineer",
@@ -51,8 +50,8 @@ const services = [
     ]
   },
   {
-    icon: UtensilsCrossed,
-    title: "Cooker Installation",
+    icon: ShowerHead,
+    title: "Kitchen Tap",
     description: "Safe installation and connection of gas cookers and hobs.",
     details: [
       "Safety First",
@@ -65,7 +64,7 @@ const services = [
   },
   {
     icon: Droplets,
-    title: "Water Leak Inspection & Repair",
+    title: "Bath Tap & Shower Repair",
     description: "Detection and repair of water leaks with minimal disruption.",
     details: [
       "Check the Water Meter",
@@ -77,8 +76,8 @@ const services = [
     ]
   },
   {
-    icon: AlertTriangle,
-    title: "Gas Leak Inspection & Repair",
+    icon: Radiation,
+    title: "Radiator",
     description: "Emergency gas leak detection and repair. Available 24/7.",
     details: [
       "Initial Inspection & Detection",
@@ -88,7 +87,7 @@ const services = [
       "Repair or Replace Components"
     ]
   },
-  {
+  /*{
     icon: Wind,
     title: "Power Flushing",
     description: "Remove sludge and debris from your heating system for better efficiency.",
@@ -101,7 +100,7 @@ const services = [
       "Individual Radiator Flush",
       "Agitation"
     ]
-  },
+  },*/
   {
     icon: Settings,
     title: "General Plumbing & Heating",
@@ -190,12 +189,18 @@ export default function ServicesSection() {
         </div>
       </div>
     </section>
+      
      {selectedService && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50"
+      onClick={() => setSelectedService(null)}
+      >
         <div
-          className="bg-white rounded-2xl max-w-lg w-full p-6 relative animate-fade-in-up"
+          className="bg-white w-full max-w-lg rounded-t-3xl p-6 relative max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Handle Bar */}
+          <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+
           {/* Close Button */}
           <button
             onClick={() => setSelectedService(null)}
@@ -204,14 +209,17 @@ export default function ServicesSection() {
             ✕
           </button>
 
+          {/* Title */}
           <h3 className="text-2xl font-bold mb-4">
             {selectedService.title}
           </h3>
-
+          
+          {/* Description */}
           <p className="text-gray-700 mb-4">
             {selectedService.description}
           </p>
 
+          {/* Details */}
           <ul className="space-y-2 mb-6">
             {selectedService.details.map((item, i) => (
               <li key={i} className="flex items-start gap-2">
@@ -220,7 +228,8 @@ export default function ServicesSection() {
               </li>
             ))}
           </ul>
-
+          
+          {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-3">
             <a
               href="tel:+447903753797"
