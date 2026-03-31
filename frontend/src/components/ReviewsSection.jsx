@@ -45,6 +45,7 @@ const fallbackReviews = [
     text: "They are a great company, they go above and beyond to make their customers happy. Been using them for years now, would absolutely recommend.",
     rating: 5
   }
+
 ];
 
 export default function ReviewsSection() {
@@ -83,14 +84,29 @@ export default function ReviewsSection() {
             What Our Customers Say
           </h2>
 
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-6 h-6 text-yellow-500 fill-yellow-500" />
-              ))}
+          {/* Google Branding */}
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+              <img
+                src="/images/icons8-google.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              <span className="text-sm font-semibold text-gray-700">
+                Google Reviews
+              </span>
             </div>
-            <span className="text-black font-bold text-lg">5.0</span>
-            <span className="text-gray-600">(166 Reviews on Google)</span>
+
+            {/* Rating */}
+            <div className="flex items-center justify-center gap-3">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                ))}
+              </div>
+              <span className="text-black font-bold text-lg">5.0</span>
+              <span className="text-gray-600">(166 Reviews)</span>
+            </div>
           </div>
         </div>
 
@@ -145,7 +161,7 @@ export default function ReviewsSection() {
                     ))}
                   </div>
 
-                  {/* Text */}
+                  {/* Review Text */}
                   <p className="text-gray-700 leading-relaxed mb-6 relative z-10 italic">
                     "{review.text}"
                   </p>
@@ -160,8 +176,15 @@ export default function ReviewsSection() {
 
                     <div>
                       <p className="font-bold text-black">{review.name}</p>
-                      <p className="text-sm text-gray-600 flex items-center gap-1">
-                        ✔ Verified Google Review
+
+                      {/* Google Verified Badge */}
+                      <p className="text-sm text-gray-600 flex items-center gap-2">
+                        <img
+                          src="/images/icons8-google.svg"
+                          alt="Google"
+                          className="w-4 h-4"
+                        />
+                        Verified Google Review
                       </p>
                     </div>
                   </div>
@@ -190,7 +213,7 @@ export default function ReviewsSection() {
             data-testid="google-reviews-link"
             className="inline-flex items-center text-yellow-500 hover:text-yellow-600 font-bold transition-colors"
           >
-            See why customers trust us on Google →
+            Read more verified reviews on Google →
           </a>
         </div>
       </div>
