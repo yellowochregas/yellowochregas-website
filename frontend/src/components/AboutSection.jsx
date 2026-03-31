@@ -104,7 +104,7 @@ useEffect(() => {
 
           <div className="relative mb-8">
             <img
-              src="/images/gas-safe-engineer.jpg"
+              src="/images/gas-safe-engineer-2.jpg"
               alt="Gas Safe Engineer at work"
               className="w-full h-64 sm:h-80 object-cover rounded-2xl shadow-lg"
             />
