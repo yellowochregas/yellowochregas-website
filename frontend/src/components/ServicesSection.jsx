@@ -25,66 +25,65 @@ const services = [
   {
     icon: Heater,
     title: "Hot Water",
-    description: "Fast diagnosis and repair of all boiler makes. Annual servicing available.",
+    description: "Powering down, cleaning the combustion chamber/burners, inspecting for leaks/corrosion, testing safety valves (LWCO and pressure relief), and flushing sediment",
     details: [
-      "Safe Isolation",
-      "Initial Inspection & Visual Check",
-      "Removing Casing & Internal Cleaning",
-      "Condensate Trap Service",
-      "Flue and Ventilation Check",
-      "Safety Device Testing",
-      "Component Inspection",
-      "Combustion Analysis",
-      "Final Testing & Reporting"
+      "Safety First",
+      "Inspection & Cleaning",
+      "Water System Maintenance:",
+      "Component Checks",
+      "Start-Up & Testing"
     ]
   },
   {
     icon: Bath,
     title: "Bathroom Taps",
-    description: "CP12 certificates for landlords. Competitive rates and fast turnaround.",
+    description: "Servicing and repairing bathroom taps involves turning off the water supply, removing the handle, and replacing damaged cartridges, washers, or O-rings",
     details: [
-      "Find a Qualified Engineer",
-      "Schedule the Inspection",
-      "The Inspection (CP12 Check)",
-      "Receive the Certificate"
+      "Preparation and Safety",
+      "Disassembly Steps",
+      "Repair and Replacement",
+      "Reassembly and Testing",
+      "Common Fixes by Symptom"
     ]
   },
   {
     icon: ShowerHead,
     title: "Kitchen Tap",
-    description: "Safe installation and connection of gas cookers and hobs.",
+    description: "Shutting off the water supply, dismantling the handle (using Allen keys or screwdrivers), and replacing internal parts like ceramic cartridges, O-rings, or washers",
     details: [
-      "Safety First",
-      "Access Wiring",
-      "Connect Power Cable",
-      "Secure Cable",
-      "Position and Level",
-      "Final Inspection"
+      "Turn Off Water",
+      "Release Pressure",
+      "Remove Handle",
+      "Remove Cartridge/Valve",
+      "Replace Components",
+      "Reassemble",
+      "Test Operation"
     ]
   },
   {
     icon: Droplets,
     title: "Bath Tap & Shower Repair",
-    description: "Detection and repair of water leaks with minimal disruption.",
+    description: "Replacing worn-out washers, O-rings, or cartridges, usually within an hour.",
     details: [
-      "Check the Water Meter",
-      "Visual Inspection",
-      "Toilet Test",
-      "Use Specialized Tools",
       "Shut Off Water Supply",
-      "Drain the Lines"
+      "Drain Pipes",
+      "Protect Fixtures",
+      "Remove Handle/Trim",
+      "Remove Old Components",
+      "Replace Parts",
+      "Reassemble & Test"
     ]
   },
   {
     icon: Radiation,
     title: "Radiator",
-    description: "Emergency gas leak detection and repair. Available 24/7.",
+    description: "Radiator servicing involves draining old coolant, flushing the system to remove debris, and replacing components like hoses or the thermostat to prevent overheating",
     details: [
-      "Initial Inspection & Detection",
-      "Pressure Testing",
-      "Environmental Cues",
-      "Isolate the Supply",
-      "Repair or Replace Components"
+      "Inspection",
+      "Cleaning & Flushing",
+      "Repairing Leaks",
+      "Replacing Components",
+      "Refilling & Testing"
     ]
   },
   /*{
@@ -104,14 +103,15 @@ const services = [
   {
     icon: Settings,
     title: "General Plumbing & Heating",
-    description: "Comprehensive plumbing and heating services for all your needs.",
+    description: "General plumbing and heating involves three main phases: rough-in (installing pipes/ducts), finishing (installing fixtures/units), and testing (checking for leaks and proper function)",
     details: [
-      "Preparation and Safety",
-      "Planning and Design",
-      "Rough-In Phase",
-      "Testing and Inspection",
-      "Fixture Installation (Trim-Out)",
-      "Final Inspection"
+      "Planning & Rough-in",
+      "Gas & Water Installation",
+      "Fixture Installation (Finish Phase)",
+      "Heating System Setup",
+      "System Testing",
+      "Maintenance",
+      "General Plumbing Services"
     ]
   }
 ];
@@ -197,7 +197,7 @@ export default function ServicesSection() {
         >
           {/* Handle Bar */}
           <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
-          
+
           {/* Close Button */}
           <button
             onClick={() => setSelectedService(null)}
