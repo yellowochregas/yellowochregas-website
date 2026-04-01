@@ -1,4 +1,11 @@
-import { Phone, MapPin, Clock, Star, Shield } from "lucide-react";
+import {
+  Phone,
+  MapPin,
+  Clock,
+  Star,
+  Shield,
+  MessageCircle
+} from "lucide-react";
 
 const services = [
   "Boiler Installation",
@@ -23,54 +30,66 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const scrollToSection = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <footer data-testid="footer" className="footer-dark">
-      {/* Main Footer */}
+    <footer className="bg-black text-white">
+
+      {/* 🔥 TOP CTA STRIP */}
+      <div className="bg-yellow-500 text-black py-4 px-4 text-center font-semibold">
+        🚨 Need urgent help? Call now — we’re available 24/7
+        <a href="tel:+447593217699" className="ml-2 underline font-bold">
+          +44 7593 217699
+        </a>
+      </div>
+
+      {/* MAIN FOOTER */}
       <div className="container mx-auto px-4 md:px-6 max-w-7xl py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Company Info */}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          {/* COMPANY */}
           <div>
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                <span className="font-heading font-bold text-black text-lg">YO</span>
+                <span className="font-bold text-black">YO</span>
               </div>
-              <div>
-                <span className="font-heading font-bold text-white">Yellow Ochre</span>
-                <span className="font-heading text-yellow-500 ml-1">Gas</span>
-              </div>
+              <span className="font-bold">
+                Yellow Ochre <span className="text-yellow-500">Gas</span>
+              </span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Family-run Heating & Plumbing business offering professional, reliable, and affordable solutions across Greater London.
+
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Trusted plumbing & heating experts serving Greater London.
+              Fast response, certified engineers, and reliable service you can count on.
             </p>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                ))}
-              </div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-2 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+              ))}
               <span className="text-sm text-gray-400">5.0 (166 Reviews)</span>
             </div>
+
+            {/* Trust */}
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <Shield className="w-4 h-4 text-yellow-500" />
-              <span className="footer-link">Gas Safe Registered</span>
+              Gas Safe Registered
             </div>
           </div>
 
-          {/* Services */}
+          {/* SERVICES */}
           <div>
-            <h4 className="font-heading text-lg font-bold text-white mb-6">Our Services</h4>
-            <ul className="space-y-3">
-              {services.map((service, index) => (
-                <li key={index}>
+            <h4 className="font-bold mb-5">Services</h4>
+            <ul className="space-y-2 text-sm">
+              {services.map((service, i) => (
+                <li key={i}>
                   <button
                     onClick={() => scrollToSection("#services")}
-                    className="footer-link text-sm transition-colors hover:bg-yellow-500"
+                    className="text-gray-400 hover:text-yellow-500 transition"
                   >
                     {service}
                   </button>
@@ -79,78 +98,80 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Service Areas */}
+          {/* AREAS */}
           <div>
-            <h4 className="font-heading text-lg font-bold text-white mb-6">Service Areas</h4>
-            <ul className="space-y-3">
-              {areas.map((area, index) => (
-                <li key={index}>
-                  <button
-                    onClick={() => scrollToSection("#areas")}
-                    className="footer-link text-sm transition-colors flex items-center gap-2 hover:bg-yellow-500"
-                  >
-                    <MapPin className="w-4 h-4" />
-                    {area}
-                  </button>
+            <h4 className="font-bold mb-5">Service Areas</h4>
+            <ul className="space-y-2 text-sm">
+              {areas.map((area, i) => (
+                <li key={i} className="flex items-center gap-2 text-gray-400">
+                  <MapPin className="w-4 h-4 text-yellow-500" />
+                  {area}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* CONTACT */}
           <div>
-            <h4 className="font-heading text-lg font-bold text-white mb-6">Contact Us</h4>
+            <h4 className="font-bold mb-5">Contact</h4>
+
             <div className="space-y-4">
+
+              {/* Call */}
               <a
-                href="tel:+447903753797"
-                data-testid="footer-phone-link"
-                className="flex items-center gap-3 text-gray-400 hover:text-yellow-500 transition-colors"
+                href="tel:+447593217699"
+                className="flex items-center gap-3 hover:text-yellow-500 transition"
               >
-                <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-yellow-500" />
-                </div>
-                <div>
-                  <p className="text-sm">Call Us</p>
-                  <p className="font-bold text-white">+44 7593 217699</p>
-                </div>
+                <Phone />
+                <span>+44 7593 217699</span>
               </a>
 
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/447593217699"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 hover:text-green-400 transition"
+              >
+                <MessageCircle />
+                <span>WhatsApp Chat</span>
+              </a>
+
+              {/* Location */}
               <div className="flex items-center gap-3 text-gray-400">
-                <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-yellow-500" />
-                </div>
-                <div>
-                  <p className="text-sm">Location</p>
-                  <p className="font-bold text-white">Braintre CM7 3DP</p>
-                </div>
+                <MapPin />
+                <span>Braintree, UK</span>
               </div>
 
+              {/* Availability */}
               <div className="flex items-center gap-3 text-gray-400">
-                <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-yellow-500" />
-                </div>
-                <div>
-                  <p className="text-sm">Availability</p>
-                  <p className="font-bold text-white">Open 24/7</p>
-                </div>
+                <Clock />
+                <span>24/7 Availability</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* 🔥 SEO TEXT */}
+        <div className="mt-12 border-t border-gray-800 pt-6 text-gray-500 text-sm leading-relaxed max-w-4xl">
+          We provide expert plumbing and heating services across Greater London,
+          including Braintree, Barking, Dagenham, and surrounding areas. Whether
+          you need emergency boiler repairs, gas safety certificates, or full
+          system installations, our certified engineers are ready to help 24/7.
+        </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* BOTTOM BAR */}
       <div className="border-t border-gray-800">
-        <div className="container mx-auto px-4 md:px-6 max-w-7xl py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-            <p>&copy; {currentYear} Yellow Ochre Gas. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <a href="/admin" data-testid="footer-admin-link" className="hover:text-yellow-500 transition-colors">
-                Admin
-              </a>
-              <span>|</span>
-              <span>Plumbing & Heating Specialists</span>
-            </div>
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-3">
+          <p>&copy; {currentYear} Yellow Ochre Gas. All rights reserved.</p>
+
+          <div className="flex gap-4 items-center">
+            <a href="/admin" className="hover:text-yellow-500">
+              Admin
+            </a>
+            <span>|</span>
+            <span>Plumbing & Heating Specialists</span>
           </div>
         </div>
       </div>
