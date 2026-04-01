@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { ChevronUp } from "lucide-react";
 import {
   Phone,
   MapPin,
@@ -27,6 +29,30 @@ const areas = [
 ];
 
 export default function Footer() {
+const [showScroll, setShowScroll] = useState(false);
+
+    useEffect(() => {
+    const handleScroll = () => {
+    if (window.scrollY > 300) {
+    setShowScroll(true);
+    } else {
+    setShowScroll(false);
+    }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
+    const scrollToTop = () => {
+    window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+    });
+    };
+
+
   const currentYear = new Date().getFullYear();
 
   const scrollToSection = (href) => {
@@ -175,6 +201,16 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {showScroll && (
+        <button
+          onClick={scrollToTop}
+          className="group fixed bottom-24 right-6 z-50 bg-yellow-500 text-black p-4 rounded-full shadow-xl hover:scale-110 transition-all duration-300 animate-fade-in-up"
+          aria-label="Scroll to top"
+        >
+              <ChevronUp className="w-6 h-6 transition-transform duration-300 group-hover:-translate-y-1" />
+        </button>
+      )}
     </footer>
   );
 }
