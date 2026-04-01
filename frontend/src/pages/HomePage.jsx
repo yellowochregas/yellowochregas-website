@@ -7,6 +7,7 @@ import ReviewsSection from "../components/ReviewsSection";
 import ServiceAreasSection from "../components/ServiceAreasSection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
+import FloatingCTA from "../components/FloatingCTA";
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -29,6 +30,7 @@ export default function HomePage() {
         <ReviewsSection />
         <ServiceAreasSection />
         <ContactSection />
+        <FloatingCTA />
       </main>
       <Footer />
     </div>
