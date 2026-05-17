@@ -5,10 +5,10 @@
   "requires": true,
   "description": "Yellow Ochre Gas API - Express.js Backend",
   "main": "server.js",
-  "packages": {},
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed": "node seed/sampleData.js"
   },
   "dependencies": {
     "array-flatten": "^3.0.0",
@@ -39,6 +39,7 @@
     "methods": "^1.1.2",
     "mime": "^4.1.0",
     "mongodb": "^7.1.0",
+    "mongoose": "^8.9.5",
     "qs": "^6.15.0",
     "range-parser": "^1.2.1",
     "raw-body": "^3.0.2",

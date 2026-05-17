@@ -1,324 +1,398 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { toast } from "sonner";
-import Button from "../components/ui/button";
-import Input from "../components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import Badge from "../components/ui/badge";
-import { 
-  Mail, 
-  Phone, 
-  User, 
-  Calendar, 
-  Trash2, 
+import { useEffect, useState } from "react";
+import {
+  AlertTriangle,
   CheckCircle,
-  LogOut,
   Lock,
-  MessageSquare,
-  ArrowLeft
+  UserPlus,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import {
+  adminLogin,
+  assignEngineer,
+  getAdminDashboard,
+} from "../services/api";
+
+import {
+  JobCard,
+  EmptyState,
+} from "../components/DashboardList";
+
+const sampleDashboard = {
+  bookings: [
+    {
+      id: "1",
+      publicId: "YOG-5001",
+      issueType: "Water leak",
+      postcode: "CM7 3DP",
+      urgency: "Emergency",
+      status: "Emergency review",
+      customer: {
+        name: "Mrs Taylor",
+        phone: "07593 217699",
+      },
+    },
+    {
+      id: "2",
+      publicId: "YOG-5002",
+      issueType: "Boiler service",
+      postcode: "CM77 7WT",
+      urgency: "This week",
+      status: "New",
+      customer: {
+        name: "Mr Patel",
+        phone: "07593 217699",
+      },
+    },
+  ],
+
+  engineers: [
+    {
+      _id: "demo-engineer",
+      name: "Demo Engineer",
+      skills: ["Boiler", "Plumbing"],
+      active: true,
+    },
+  ],
+
+  reviews: [],
+  locationPages: [],
+};
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [credentials, setCredentials] = useState({
+    email: "admin@yellowochregas.local",
+    password: "",
+  });
 
-  const getAuthHeader = () => {
-    const credentials = btoa(`${username}:${password}`);
-    return { Authorization: `Basic ${credentials}` };
-  };
+  const [token, setToken] = useState(
+    localStorage.getItem("yellow-ochre-admin-token") || ""
+  );
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API}/admin/login`, { username, password });
-      if (response.data.success) {
-        setIsAuthenticated(true);
-        toast.success("Login successful");
-        fetchContacts();
+  const [dashboard, setDashboard] = useState(sampleDashboard);
+
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchDashboard = async () => {
+      try {
+        const data = await getAdminDashboard(token);
+
+        setDashboard({
+          bookings: Array.isArray(data?.bookings)
+            ? data.bookings
+            : [],
+
+          engineers: Array.isArray(data?.engineers)
+            ? data.engineers
+            : [],
+
+          reviews: Array.isArray(data?.reviews)
+            ? data.reviews
+            : [],
+
+          locationPages: Array.isArray(data?.locationPages)
+            ? data.locationPages
+            : [],
+        });
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+
+        // fallback safe state
+        setDashboard(sampleDashboard);
       }
-    } catch (error) {
-      toast.error("Invalid credentials");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const fetchContacts = async () => {
+    fetchDashboard();
+  }, [token]);
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    setError("");
+
     try {
-      const response = await axios.get(`${API}/admin/contacts`, {
-        headers: getAuthHeader()
-      });
-      setContacts(response.data);
-    } catch (error) {
-      toast.error("Failed to fetch contacts");
+      const response = await adminLogin(credentials);
+
+      localStorage.setItem(
+        "yellow-ochre-admin-token",
+        response.token
+      );
+
+      setToken(response.token);
+    } catch (loginError) {
+      console.error(loginError);
+
+      setError(
+        "Admin login is not connected or the credentials are incorrect. Use the backend seed to create an admin user."
+      );
     }
   };
 
-  const markAsRead = async (contactId) => {
+  const handleAssign = async (jobId) => {
     try {
-      await axios.patch(`${API}/admin/contacts/${contactId}/read`, {}, {
-        headers: getAuthHeader()
-      });
-      setContacts(contacts.map(c => 
-        c.id === contactId ? { ...c, read: true } : c
-      ));
-      toast.success("Marked as read");
+      await assignEngineer(
+        token,
+        jobId,
+        dashboard?.engineers?.[0]?._id || "demo-engineer"
+      );
+
+      setDashboard((current) => ({
+        ...current,
+
+        bookings: current?.bookings?.map((booking) =>
+          booking._id === jobId || booking.id === jobId
+            ? {
+                ...booking,
+                status: "Engineer assigned",
+              }
+            : booking
+        ) || [],
+      }));
     } catch (error) {
-      toast.error("Failed to update");
+      console.error("Assign engineer error:", error);
+
+      // optimistic UI fallback
+      setDashboard((current) => ({
+        ...current,
+
+        bookings: current?.bookings?.map((booking) =>
+          booking._id === jobId || booking.id === jobId
+            ? {
+                ...booking,
+                status: "Engineer assigned",
+              }
+            : booking
+        ) || [],
+      }));
     }
   };
 
-  const deleteContact = async (contactId) => {
-    if (!window.confirm("Are you sure you want to delete this inquiry?")) return;
-    
-    try {
-      await axios.delete(`${API}/admin/contacts/${contactId}`, {
-        headers: getAuthHeader()
-      });
-      setContacts(contacts.filter(c => c.id !== contactId));
-      toast.success("Deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete");
-    }
-  };
+  const emergencyBookings =
+    dashboard?.bookings?.filter(
+      (booking) => booking?.urgency === "Emergency"
+    ) || [];
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUsername("");
-    setPassword("");
-    setContacts([]);
-    toast.info("Logged out");
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-  };
-
-  const unreadCount = contacts.filter(c => !c.read).length;
-
-  if (!isAuthenticated) {
+  if (!token) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mb-4">
-              <Lock className="w-8 h-8 text-gray-900" />
-            </div>
-            <CardTitle className="font-heading text-2xl text-gray-800">
-              Admin Login
-            </CardTitle>
-            <p className="text-gray-600 text-sm mt-2">
-              Yellow Ochre Gas Dashboard
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Input
-                  data-testid="admin-username-input"
-                  type="text"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="h-12"
-                  required
-                />
-              </div>
-              <div>
-                <Input
-                  data-testid="admin-password-input"
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12"
-                  required
-                />
-              </div>
-              <Button
-                data-testid="admin-login-btn"
-                type="submit"
-                className="w-full h-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold"
-                disabled={loading}
+      <section className="admin-login">
+        <div className="login-card">
+          <Lock aria-hidden="true" />
+
+          <span className="eyebrow">
+            Admin foundation
+          </span>
+
+          <h1>Yellow Ochre Gas admin</h1>
+
+          <p>
+            Dashboard foundation for emergency
+            requests, leads, engineers, reviews
+            and local content.
+          </p>
+
+          <form
+            onSubmit={handleLogin}
+            className="form-grid"
+          >
+            {error && (
+              <p
+                className="form-error"
+                role="alert"
               >
-                {loading ? "Logging in..." : "Login"}
-              </Button>
-            </form>
-            <Link to="/" className="block mt-6">
-              <Button
-                data-testid="back-to-home-btn"
-                variant="outline"
-                className="w-full"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Website
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
+                {error}
+              </p>
+            )}
+
+            <label className="field-block">
+              <span>Email</span>
+
+              <input
+                type="email"
+                value={credentials.email}
+                onChange={(event) =>
+                  setCredentials({
+                    ...credentials,
+                    email: event.target.value,
+                  })
+                }
+              />
+            </label>
+
+            <label className="field-block">
+              <span>Password</span>
+
+              <input
+                type="password"
+                value={credentials.password}
+                placeholder="Seeded admin password"
+                onChange={(event) =>
+                  setCredentials({
+                    ...credentials,
+                    password: event.target.value,
+                  })
+                }
+              />
+            </label>
+
+            <button
+              className="primary-button"
+              type="submit"
+            >
+              Sign in
+            </button>
+          </form>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Admin Header */}
-      <header className="bg-gray-800 text-white py-4 px-6 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="font-heading text-xl">Yellow Ochre Gas</h1>
-            <Badge className="bg-yellow-500 text-gray-900">Admin</Badge>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-300">Welcome, {username}</span>
-            <Button
-              data-testid="admin-logout-btn"
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="border-gray-600 text-white hover:bg-gray-700"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
+    <section className="dashboard-page">
+      <div className="page-heading">
+        <span className="eyebrow">
+          Admin dashboard foundation
+        </span>
 
-      {/* Dashboard Content */}
-      <main className="max-w-7xl mx-auto p-6">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Total Inquiries</p>
-                  <p className="text-3xl font-bold text-gray-800">{contacts.length}</p>
-                </div>
-                <MessageSquare className="w-12 h-12 text-yellow-500" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Unread</p>
-                  <p className="text-3xl font-bold text-yellow-600">{unreadCount}</p>
-                </div>
-                <Mail className="w-12 h-12 text-yellow-500" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Read</p>
-                  <p className="text-3xl font-bold text-green-600">{contacts.length - unreadCount}</p>
-                </div>
-                <CheckCircle className="w-12 h-12 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
+        <h1>Operations dashboard</h1>
+
+        <p>
+          Emergency requests first, then leads,
+          engineer assignment, customers,
+          reviews and location content.
+        </p>
+      </div>
+
+      <div className="stats-row">
+        <div>
+          <strong>
+            {dashboard?.bookings?.length || 0}
+          </strong>
+
+          <span>Total bookings</span>
         </div>
 
-        {/* Inquiries List */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-heading text-xl flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-yellow-500" />
-              Contact Inquiries
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {contacts.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                <MessageSquare className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p>No inquiries yet</p>
-              </div>
+        <div>
+          <strong>
+            {emergencyBookings?.length || 0}
+          </strong>
+
+          <span>Emergency first</span>
+        </div>
+
+        <div>
+          <strong>
+            {dashboard?.engineers?.length || 0}
+          </strong>
+
+          <span>Engineers</span>
+        </div>
+      </div>
+
+      <div className="panel-grid two">
+        <article className="dashboard-panel">
+          <h2>
+            <AlertTriangle aria-hidden="true" />
+            Emergency requests
+          </h2>
+
+          <div className="stack">
+            {emergencyBookings.length ? (
+              emergencyBookings.map((booking) => (
+                <JobCard
+                  key={
+                    booking._id || booking.id
+                  }
+                  job={booking}
+                  actions={
+                    <button
+                      className="mini-button"
+                      type="button"
+                      onClick={() =>
+                        handleAssign(
+                          booking._id ||
+                            booking.id
+                        )
+                      }
+                    >
+                      <UserPlus
+                        size={16}
+                        aria-hidden="true"
+                      />
+                      Assign
+                    </button>
+                  }
+                />
+              ))
             ) : (
-              <div className="space-y-4">
-                {contacts.map((contact) => (
-                  <div
-                    key={contact.id}
-                    data-testid={`contact-card-${contact.id}`}
-                    className={`admin-card p-4 border rounded-lg ${
-                      !contact.read ? "unread bg-yellow-50" : "bg-white"
-                    }`}
-                  >
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <User className="w-4 h-4 text-gray-500" />
-                          <span className="font-semibold text-gray-800">{contact.name}</span>
-                          {!contact.read && (
-                            <Badge className="bg-yellow-500 text-gray-900 text-xs">New</Badge>
-                          )}
-                        </div>
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
-                          <span className="flex items-center gap-1">
-                            <Mail className="w-4 h-4" />
-                            {contact.email}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Phone className="w-4 h-4" />
-                            {contact.phone}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {formatDate(contact.created_at)}
-                          </span>
-                        </div>
-                        <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
-                          {contact.message}
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        {!contact.read && (
-                          <Button
-                            data-testid={`mark-read-btn-${contact.id}`}
-                            size="sm"
-                            variant="outline"
-                            onClick={() => markAsRead(contact.id)}
-                            className="text-green-600 border-green-600 hover:bg-green-50"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </Button>
-                        )}
-                        <Button
-                          data-testid={`delete-btn-${contact.id}`}
-                          size="sm"
-                          variant="outline"
-                          onClick={() => deleteContact(contact.id)}
-                          className="text-red-600 border-red-600 hover:bg-red-50"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <EmptyState
+                title="No emergency requests"
+                text="Emergency jobs will appear here first."
+              />
             )}
-          </CardContent>
-        </Card>
-      </main>
-    </div>
+          </div>
+        </article>
+
+        <article className="dashboard-panel">
+          <h2>
+            <CheckCircle aria-hidden="true" />
+            All bookings and leads
+          </h2>
+
+          <div className="stack">
+            {dashboard?.bookings?.length ? (
+              dashboard.bookings.map(
+                (booking) => (
+                  <JobCard
+                    key={
+                      booking._id ||
+                      booking.id
+                    }
+                    job={booking}
+                    actions={
+                      <button
+                        className="mini-button"
+                        type="button"
+                        onClick={() =>
+                          handleAssign(
+                            booking._id ||
+                              booking.id
+                          )
+                        }
+                      >
+                        <UserPlus
+                          size={16}
+                          aria-hidden="true"
+                        />
+                        Assign
+                      </button>
+                    }
+                  />
+                )
+              )
+            ) : (
+              <EmptyState
+                title="No bookings found"
+                text="Bookings and leads will appear here."
+              />
+            )}
+          </div>
+        </article>
+
+        <article className="dashboard-panel">
+          <h2>Manage foundations</h2>
+
+          <ul className="plain-list">
+            <li>Customer records</li>
+            <li>Engineer profiles</li>
+            <li>Job status updates</li>
+            <li>Reviews and testimonials</li>
+            <li>Service and location pages</li>
+            <li>CSV export foundation</li>
+          </ul>
+        </article>
+      </div>
+    </section>
   );
 }

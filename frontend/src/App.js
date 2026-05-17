@@ -1,20 +1,30 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AppShell from "@/components/AppShell";
 import HomePage from "@/pages/HomePage";
 import AdminPage from "@/pages/AdminPage";
+import AssistantPage from "@/pages/AssistantPage";
+import ConfirmationPage from "@/pages/ConfirmationPage";
+import AreaPage from "@/pages/AreaPage";
+import CustomerDashboard from "@/pages/CustomerDashboard";
+import EngineerDashboard from "@/pages/EngineerDashboard";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppShell />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/assistant/:issueId" element={<AssistantPage />} />
+          <Route path="/confirmation/:publicId" element={<ConfirmationPage />} />
+          <Route path="/areas/:slug" element={<AreaPage />} />
+          <Route path="/customer" element={<CustomerDashboard />} />
+          <Route path="/engineer" element={<EngineerDashboard />} />
           <Route path="/admin" element={<AdminPage />} />
-        </Routes>
-      </BrowserRouter>
-      <Toaster position="top-right" richColors />
-    </div>
+          <Route path="/strategy" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
