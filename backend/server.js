@@ -10,6 +10,7 @@ const bookingRoutes = require("./routes/bookingRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const engineerRoutes = require("./routes/engineerRoutes");
 const publicRoutes = require("./routes/publicRoutes");
+const quoteRoutes = require("./routes/quoteRoutes");
 const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
@@ -27,6 +28,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/quotes", quoteRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/engineers", engineerRoutes);
 app.use("/api/admin", adminRoutes);

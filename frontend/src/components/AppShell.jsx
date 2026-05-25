@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { CalendarCheck, ClipboardList, Home, MapPinned, ShieldCheck, UserCog, Wrench } from "lucide-react";
 import EmergencyCTA from "./EmergencyCTA";
 import { brand } from "../data/brand";
@@ -14,6 +15,10 @@ const navItems = [
 export default function AppShell() {
   const location = useLocation();
   const isDashboard = ["/admin", "/engineer", "/customer"].some((path) => location.pathname.startsWith(path));
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <div className="app-shell">

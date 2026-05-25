@@ -447,6 +447,420 @@ h3 {
   margin-top: 18px;
 }
 
+.quote-entry-section {
+  display: grid;
+  gap: 16px;
+  margin: 22px 0;
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(234, 179, 8, 0.45);
+  background:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.78)),
+    var(--ink);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+.quote-entry-section h2,
+.quote-entry-section p {
+  color: #fff;
+}
+
+.quote-entry-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.quote-entry-cards {
+  display: grid;
+  gap: 10px;
+}
+
+.quote-entry-cards article {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.quote-entry-cards svg,
+.quote-entry-cards span {
+  color: var(--ochre);
+}
+
+.quote-experience {
+  display: grid;
+  gap: 16px;
+}
+
+.quote-hero {
+  min-height: 360px;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.4)),
+    var(--quote-hero-image, #000) center / cover;
+  box-shadow: var(--shadow);
+}
+
+.quote-hero h1 {
+  max-width: 760px;
+  margin: 10px 0;
+  color: #fff;
+  font-size: clamp(2.2rem, 11vw, 5.4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.quote-hero p {
+  max-width: 640px;
+  color: #fff;
+  font-size: 1.08rem;
+}
+
+.quote-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.quote-hero-badges span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  font-weight: 800;
+}
+
+.quote-emergency {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: #fff0ed;
+  border-left: 8px solid var(--danger);
+}
+
+.quote-emergency a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.quote-shell {
+  display: grid;
+  gap: 14px;
+}
+
+.quote-card,
+.quote-sidebar {
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.quote-card h2,
+.quote-sidebar h2 {
+  margin: 8px 0;
+  font-size: 1.55rem;
+}
+
+.quote-muted {
+  color: #555;
+}
+
+.quote-type-grid,
+.quote-field-grid,
+.quote-summary-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.quote-type-card {
+  position: relative;
+  display: grid;
+  min-height: 280px;
+  align-content: end;
+  overflow: hidden;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--line);
+  text-align: left;
+  background: var(--ink);
+  color: #fff;
+}
+
+.quote-type-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.42;
+}
+
+.quote-type-card > *:not(img) {
+  position: relative;
+  z-index: 1;
+}
+
+.quote-type-card strong {
+  font-family: "Oswald", sans-serif;
+  color: #fff;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+}
+
+.quote-type-card small,
+.quote-type-card p {
+  color: #fff;
+}
+
+.quote-type-card.selected,
+.quote-type-card:hover,
+.quote-type-card:focus-visible {
+  border-color: var(--ochre);
+  outline: 3px solid rgba(234, 179, 8, 0.35);
+}
+
+.quote-type-icon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: var(--ochre);
+  color: var(--ink);
+}
+
+.quote-stepper {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.quote-progress {
+  position: sticky;
+  top: 166px;
+  z-index: 10;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eee0aa;
+}
+
+.quote-progress span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.quote-step-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.quote-step-list span {
+  min-width: max-content;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  font-weight: 800;
+}
+
+.quote-step-list span.active {
+  background: var(--ochre);
+  border-color: var(--ink);
+}
+
+.quote-step-list span.done {
+  background: var(--ink);
+  color: #fff;
+}
+
+.quote-step-content {
+  display: grid;
+  gap: 14px;
+}
+
+.quote-field {
+  display: grid;
+  gap: 6px;
+}
+
+.quote-field.full {
+  grid-column: 1 / -1;
+}
+
+.quote-field span,
+.quote-field legend,
+.quote-consent {
+  font-weight: 800;
+}
+
+.quote-field input,
+.quote-field select,
+.quote-field textarea {
+  width: 100%;
+  min-height: 54px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+
+.quote-field textarea {
+  min-height: 116px;
+  resize: vertical;
+}
+
+.quote-field small {
+  color: var(--danger);
+  font-weight: 800;
+}
+
+.fixture-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.fixture-grid label {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.quote-upload-note,
+.quote-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--ochre-light);
+}
+
+.quote-summary-grid {
+  grid-template-columns: 1fr;
+}
+
+.quote-summary-grid div {
+  display: grid;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.quote-summary-grid span {
+  color: var(--ink-soft);
+}
+
+.quote-submit-state {
+  padding: 12px;
+  border-radius: var(--radius);
+  font-weight: 800;
+}
+
+.quote-submit-state.success {
+  background: #dff7e5;
+  color: var(--success);
+}
+
+.quote-submit-state.offline {
+  background: #fff8dd;
+  color: var(--ink);
+}
+
+.quote-mobile-actions {
+  position: sticky;
+  bottom: 74px;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px -10px -10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.quote-submit-button {
+  background: var(--ochre) !important;
+  color: var(--ink) !important;
+  border: 2px solid var(--ink);
+}
+
+.quote-sidebar {
+  display: grid;
+  gap: 12px;
+}
+
+.quote-sidebar section {
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.quote-sidebar ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.quote-review-badge {
+  background: var(--ink) !important;
+  color: #fff;
+}
+
+.quote-review-badge strong,
+.quote-review-badge span,
+.quote-review-badge small {
+  display: block;
+  color: #fff;
+}
+
 .review-mini div {
   color: var(--ochre-dark);
   font-size: 1.1rem;
@@ -839,6 +1253,32 @@ h3 {
   .panel-grid.two,
   .review-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quote-entry-section,
+  .quote-shell {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+    align-items: start;
+  }
+
+  .quote-entry-actions,
+  .quote-entry-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quote-field-grid,
+  .quote-type-grid,
+  .quote-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quote-sidebar {
+    position: sticky;
+    top: 150px;
+  }
+
+  .quote-mobile-actions {
+    bottom: 12px;
   }
 
   .panel-grid {

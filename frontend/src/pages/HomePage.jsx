@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Clock, MapPin, Phone, ShieldCheck, Star } from "lucide-react";
+import { Bath, Clock, Flame, MapPin, Phone, ShieldCheck, Star } from "lucide-react";
 import IssuePicker from "../components/IssuePicker";
 import TrustPanel from "../components/TrustPanel";
 import { brand, reviews } from "../data/brand";
@@ -47,6 +47,31 @@ export default function HomePage() {
       </section>
 
       <IssuePicker />
+
+      <section className="quote-entry-section" aria-labelledby="quote-entry-title">
+        <div>
+          <span className="eyebrow">New premium quote feature</span>
+          <h2 id="quote-entry-title">Get a Fast & Professional Installation Quote</h2>
+          <p>Answer a few quick questions for boiler installation or bathroom installation and receive a tailored quote from experienced engineers.</p>
+          <div className="quote-entry-actions">
+            <Link className="primary-button" to="/quote">Start quote wizard</Link>
+            <a className="secondary-button" href={`tel:${brand.phoneTel}`}>Prefer to call?</a>
+          </div>
+        </div>
+        <div className="quote-entry-cards">
+          <article>
+            <Flame aria-hidden="true" />
+            <strong>Boiler Installation</strong>
+            <span>Gas Safe Registered</span>
+          </article>
+          <article>
+            <Bath aria-hidden="true" />
+            <strong>Bathroom Installation</strong>
+            <span>Premium finish planning</span>
+          </article>
+        </div>
+      </section>
+
       <TrustPanel />
 
       <section className="content-band reviews-band" aria-labelledby="review-heading">

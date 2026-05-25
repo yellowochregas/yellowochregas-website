@@ -8,6 +8,7 @@ import ConfirmationPage from "@/pages/ConfirmationPage";
 import AreaPage from "@/pages/AreaPage";
 import CustomerDashboard from "@/pages/CustomerDashboard";
 import EngineerDashboard from "@/pages/EngineerDashboard";
+import QuotePage from "@/pages/QuotePage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/quote" element={<QuotePage />} />
           <Route path="/assistant/:issueId" element={<AssistantPage />} />
           <Route path="/confirmation/:publicId" element={<ConfirmationPage />} />
           <Route path="/areas/:slug" element={<AreaPage />} />

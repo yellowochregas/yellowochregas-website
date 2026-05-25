@@ -15,6 +15,11 @@ export async function createBooking(payload) {
   return response.data;
 }
 
+export async function createQuote(payload) {
+  const response = await api.post("/quotes", payload);
+  return response.data;
+}
+
 export async function getBooking(id, phone) {
   const response = await api.get(`/bookings/${id}`, { params: { phone } });
   return response.data;

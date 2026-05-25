@@ -18,6 +18,35 @@ import {
 } from "../components/DashboardList";
 
 const sampleDashboard = {
+  quotes: [
+    {
+      _id: "quote-1",
+      publicId: "YOG-Q-5001",
+      quoteType: "boiler",
+      postcode: "CM7 3DP",
+      emergencyFlag: true,
+      status: "Priority quote review",
+      customer: {
+        name: "Alex Morgan",
+        phone: "07593 217699",
+        email: "alex@example.com",
+      },
+    },
+    {
+      _id: "quote-2",
+      publicId: "YOG-Q-5002",
+      quoteType: "bathroom",
+      postcode: "CM77 7WT",
+      emergencyFlag: false,
+      status: "New quote request",
+      customer: {
+        name: "Priya Shah",
+        phone: "07593 217699",
+        email: "priya@example.com",
+      },
+    },
+  ],
+
   bookings: [
     {
       id: "1",
@@ -82,6 +111,10 @@ export default function AdminPage() {
         setDashboard({
           bookings: Array.isArray(data?.bookings)
             ? data.bookings
+            : [],
+
+          quotes: Array.isArray(data?.quotes)
+            ? data.quotes
             : [],
 
           engineers: Array.isArray(data?.engineers)
@@ -275,22 +308,61 @@ export default function AdminPage() {
 
         <div>
           <strong>
+            {dashboard?.quotes?.length || 0}
+          </strong>
+
+          <span>Quote leads</span>
+        </div>
+
+        <div>
+          <strong>
             {emergencyBookings?.length || 0}
           </strong>
 
           <span>Emergency first</span>
         </div>
-
-        <div>
-          <strong>
-            {dashboard?.engineers?.length || 0}
-          </strong>
-
-          <span>Engineers</span>
-        </div>
       </div>
 
       <div className="panel-grid two">
+        <article className="dashboard-panel">
+          <h2>Quote management</h2>
+
+          <div className="stack">
+            {dashboard?.quotes?.length ? (
+              dashboard.quotes.map((quote) => (
+                <article
+                  className="job-card"
+                  key={quote._id || quote.publicId}
+                >
+                  <div className="job-card-head">
+                    <div>
+                      <strong>{quote.publicId}</strong>
+                      <p>
+                        {quote.quoteType === "boiler"
+                          ? "Boiler installation quote"
+                          : "Bathroom installation quote"}
+                      </p>
+                    </div>
+                    <span className={quote.emergencyFlag ? "status-pill urgent" : "status-pill"}>
+                      {quote.status}
+                    </span>
+                  </div>
+                  <dl className="job-meta">
+                    <div><dt>Postcode</dt><dd>{quote.postcode}</dd></div>
+                    <div><dt>Customer</dt><dd>{quote.customer?.name}</dd></div>
+                    <div><dt>Phone</dt><dd>{quote.customer?.phone}</dd></div>
+                  </dl>
+                </article>
+              ))
+            ) : (
+              <EmptyState
+                title="No quote leads found"
+                text="Boiler and bathroom quote requests will appear here."
+              />
+            )}
+          </div>
+        </article>
+
         <article className="dashboard-panel">
           <h2>
             <AlertTriangle aria-hidden="true" />
@@ -385,6 +457,8 @@ export default function AdminPage() {
 
           <ul className="plain-list">
             <li>Customer records</li>
+            <li>Quote management</li>
+            <li>Upload viewing foundation</li>
             <li>Engineer profiles</li>
             <li>Job status updates</li>
             <li>Reviews and testimonials</li>

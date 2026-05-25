@@ -4,6 +4,7 @@ const Customer = require("../models/Customer");
 const Engineer = require("../models/Engineer");
 const Job = require("../models/Job");
 const LocationPage = require("../models/LocationPage");
+const QuoteRequest = require("../models/QuoteRequest");
 const Review = require("../models/Review");
 const { createSession } = require("../middleware/auth");
 
@@ -24,8 +25,9 @@ async function login(req, res, next) {
 
 async function dashboard(req, res, next) {
   try {
-    const [bookings, customers, engineers, jobs, reviews, locationPages] = await Promise.all([
+    const [bookings, quotes, customers, engineers, jobs, reviews, locationPages] = await Promise.all([
       Booking.find().populate("customer").sort({ urgency: 1, createdAt: -1 }).limit(80),
+      QuoteRequest.find().sort({ emergencyFlag: -1, createdAt: -1 }).limit(80),
       Customer.find().sort({ createdAt: -1 }).limit(80),
       Engineer.find().sort({ active: -1, name: 1 }),
       Job.find().populate("booking engineer").sort({ createdAt: -1 }).limit(80),
@@ -33,7 +35,7 @@ async function dashboard(req, res, next) {
       LocationPage.find().sort({ areaName: 1 })
     ]);
 
-    return res.json({ bookings, customers, engineers, jobs, reviews, locationPages });
+    return res.json({ bookings, quotes, customers, engineers, jobs, reviews, locationPages });
   } catch (error) {
     return next(error);
   }
