@@ -5,6 +5,7 @@ const engineerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true },
     email: String,
+    passwordHash: String,
     gasSafeNumber: String,
     skills: [String],
     active: { type: Boolean, default: true }

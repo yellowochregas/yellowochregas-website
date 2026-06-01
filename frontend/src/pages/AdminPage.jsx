@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import {
   AlertTriangle,
   CheckCircle,
-  Lock,
   UserPlus,
 } from "lucide-react";
 
 import {
-  adminLogin,
   assignEngineer,
   getAdminDashboard,
 } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 import {
   JobCard,
@@ -88,17 +87,8 @@ const sampleDashboard = {
 };
 
 export default function AdminPage() {
-  const [credentials, setCredentials] = useState({
-    email: "admin@yellowochregas.local",
-    password: "",
-  });
-
-  const [token, setToken] = useState(
-    localStorage.getItem("yellow-ochre-admin-token") || ""
-  );
-
+  const { token, logout } = useAuth();
   const [dashboard, setDashboard] = useState(sampleDashboard);
-
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -107,6 +97,7 @@ export default function AdminPage() {
     const fetchDashboard = async () => {
       try {
         const data = await getAdminDashboard(token);
+        console.log("RAW API RESPONSE:", data);
 
         setDashboard({
           bookings: Array.isArray(data?.bookings)
@@ -131,37 +122,13 @@ export default function AdminPage() {
         });
       } catch (error) {
         console.error("Dashboard fetch error:", error);
-
-        // fallback safe state
+        setError("Live admin dashboard could not load. Showing the safe fallback view.");
         setDashboard(sampleDashboard);
       }
     };
 
     fetchDashboard();
   }, [token]);
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    setError("");
-
-    try {
-      const response = await adminLogin(credentials);
-
-      localStorage.setItem(
-        "yellow-ochre-admin-token",
-        response.token
-      );
-
-      setToken(response.token);
-    } catch (loginError) {
-      console.error(loginError);
-
-      setError(
-        "Admin login is not connected or the credentials are incorrect. Use the backend seed to create an admin user."
-      );
-    }
-  };
 
   const handleAssign = async (jobId) => {
     try {
@@ -207,80 +174,6 @@ export default function AdminPage() {
       (booking) => booking?.urgency === "Emergency"
     ) || [];
 
-  if (!token) {
-    return (
-      <section className="admin-login">
-        <div className="login-card">
-          <Lock aria-hidden="true" />
-
-          <span className="eyebrow">
-            Admin foundation
-          </span>
-
-          <h1>Yellow Ochre Gas admin</h1>
-
-          <p>
-            Dashboard foundation for emergency
-            requests, leads, engineers, reviews
-            and local content.
-          </p>
-
-          <form
-            onSubmit={handleLogin}
-            className="form-grid"
-          >
-            {error && (
-              <p
-                className="form-error"
-                role="alert"
-              >
-                {error}
-              </p>
-            )}
-
-            <label className="field-block">
-              <span>Email</span>
-
-              <input
-                type="email"
-                value={credentials.email}
-                onChange={(event) =>
-                  setCredentials({
-                    ...credentials,
-                    email: event.target.value,
-                  })
-                }
-              />
-            </label>
-
-            <label className="field-block">
-              <span>Password</span>
-
-              <input
-                type="password"
-                value={credentials.password}
-                placeholder="Seeded admin password"
-                onChange={(event) =>
-                  setCredentials({
-                    ...credentials,
-                    password: event.target.value,
-                  })
-                }
-              />
-            </label>
-
-            <button
-              className="primary-button"
-              type="submit"
-            >
-              Sign in
-            </button>
-          </form>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section className="dashboard-page">
       <div className="page-heading">
@@ -295,6 +188,8 @@ export default function AdminPage() {
           engineer assignment, customers,
           reviews and location content.
         </p>
+        {error && <p className="form-error" role="alert">{error}</p>}
+        <button className="mini-button" type="button" onClick={logout}>Sign out</button>
       </div>
 
       <div className="stats-row">

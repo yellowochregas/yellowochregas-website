@@ -6,7 +6,7 @@ const Job = require("../models/Job");
 const LocationPage = require("../models/LocationPage");
 const QuoteRequest = require("../models/QuoteRequest");
 const Review = require("../models/Review");
-const { createSession } = require("../middleware/auth");
+const { createAuthToken } = require("../middleware/auth");
 
 async function login(req, res, next) {
   try {
@@ -16,7 +16,7 @@ async function login(req, res, next) {
       return res.status(401).json({ message: "Invalid admin credentials" });
     }
 
-    const token = createSession(admin);
+    const token = createAuthToken(admin, "ADMIN");
     return res.json({ token, admin: { email: admin.email, name: admin.name, role: admin.role } });
   } catch (error) {
     return next(error);

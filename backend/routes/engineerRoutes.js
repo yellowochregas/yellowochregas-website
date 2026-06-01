@@ -1,9 +1,14 @@
 const express = require("express");
-const { getEngineerJobs, updateJob } = require("../controllers/engineerController");
+const { generateServiceReport, getEngineerJobs, getMyJobs, updateJob } = require("../controllers/engineerController");
+const { requireAuth, requireRole } = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/:engineerId/jobs", getEngineerJobs);
-router.patch("/jobs/:jobId", updateJob);
+router.use(requireAuth);
+
+router.get("/me/jobs", requireRole("ENGINEER"), getMyJobs);
+router.get("/:engineerId/jobs", requireRole("ADMIN", "ENGINEER"), getEngineerJobs);
+router.patch("/jobs/:jobId", requireRole("ADMIN", "ENGINEER"), updateJob);
+router.get("/jobs/:jobId/report", requireRole("ADMIN", "ENGINEER"), generateServiceReport);
 
 module.exports = router;

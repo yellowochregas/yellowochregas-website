@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, ArrowLeft, ArrowRight, Bath, Check, Flame, Phone, ShieldCheck, Star, UploadCloud } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, ArrowLeft, ArrowRight, Bath, Check, Flame, ShieldCheck, Star, UploadCloud, Wrench } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "./ui/button";
@@ -10,9 +10,10 @@ import { defaultQuoteValues, fieldConfig, quoteSteps, quoteTypes } from "../data
 import { createQuote } from "../services/api";
 
 const draftKey = "yellow-ochre-quote-draft";
+const validQuoteTypes = quoteTypes.map((type) => type.id);
 
 const quoteSchema = z.object({
-  quoteType: z.enum(["boiler", "bathroom"], { required_error: "Choose a quote type" }),
+  quoteType: z.enum(["boiler", "bathroom", "plumbing"], { required_error: "Choose a quote type" }),
   fullName: z.string().min(2, "Add your full name"),
   email: z.string().email("Add a valid email address"),
   phone: z.string().min(7, "Add a phone number"),
@@ -31,15 +32,49 @@ const requiredByStep = {
   design: ["preferredStyle", "preferredColours", "budgetRange"],
   fixtures: ["fixtures"],
   planning: ["startTimeframe", "projectDuration", "structuralWork", "plumbingChanges", "electricalWork"],
+  serviceProblem: ["serviceIssueType", "issueHappeningNow", "immediateRisk", "affectedArea"],
+  servicePlanning: ["urgencyPreference", "parkingAvailability"],
   review: ["gdprConsent"]
 };
 
+function readDraft() {
+  try {
+    const raw = window.localStorage.getItem(draftKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.warn("Quote draft could not be read", error);
+    return null;
+  }
+}
+
+function writeDraft(draft) {
+  try {
+    window.localStorage.setItem(draftKey, JSON.stringify(draft));
+  } catch (error) {
+    console.warn("Quote draft could not be saved", error);
+  }
+}
+
+function clearDraft() {
+  try {
+    window.localStorage.removeItem(draftKey);
+  } catch {
+    // Storage is optional; the wizard still renders without it.
+  }
+}
+
+function clampStep(type, index) {
+  const steps = quoteSteps[type] || [];
+  if (!steps.length) return 0;
+  return Math.min(Math.max(Number(index) || 0, 0), steps.length - 1);
+}
+
 function needsEmergency(values) {
-  const text = [values.existingIssues, values.specialRequirements, values.optionalNotes, values.otherRequests]
+  const text = [values.existingIssues, values.specialRequirements, values.optionalNotes, values.otherRequests, values.immediateRisk, values.serviceIssueType]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
-  return values.timeframe === "Emergency" || ["no heating", "gas leak", "water leak"].some((term) => text.includes(term));
+  return values.timeframe === "Emergency" || values.urgencyPreference === "Emergency" || ["no heating", "gas leak", "water leak", "near electrics"].some((term) => text.includes(term));
 }
 
 function smartSuggestion(values) {
@@ -59,45 +94,70 @@ function smartSuggestion(values) {
   if (values.fixtures?.includes("Walk-in shower")) {
     return "Walk-in shower projects benefit from early checks on drainage fall, waterproofing, and screen sizes.";
   }
+  if (values.quoteType === "plumbing") {
+    if (values.immediateRisk && values.immediateRisk !== "No") {
+      return "If there is water near electrics, a vulnerable person, or an active leak, call now as well as sending the request.";
+    }
+    return "Plumbing requests are easier to triage when you include the affected room, urgency, and a short photo note.";
+  }
   return "Bathroom quotes are faster when you share current-room photos and one or two inspiration references.";
 }
 
 export default function QuoteWizard() {
-  const savedDraft = useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem(draftKey) || "null");
-    } catch {
-      return null;
-    }
-  }, []);
-  const [selectedType, setSelectedType] = useState(savedDraft?.quoteType || "");
-  const [stepIndex, setStepIndex] = useState(savedDraft?.stepIndex || 0);
+  const [hydrated, setHydrated] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
+  const [stepIndex, setStepIndex] = useState(0);
   const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
 
   const form = useForm({
     resolver: zodResolver(quoteSchema),
-    defaultValues: { ...defaultQuoteValues, ...(savedDraft?.values || {}) },
+    defaultValues: defaultQuoteValues,
     mode: "onChange"
   });
 
   const values = form.watch();
   const steps = selectedType ? quoteSteps[selectedType] : [];
-  const currentStep = steps[stepIndex];
-  const progress = selectedType ? Math.round(((stepIndex + 1) / steps.length) * 100) : 0;
+  const safeStepIndex = selectedType ? clampStep(selectedType, stepIndex) : 0;
+  const currentStep = steps[safeStepIndex] || null;
+  const progress = selectedType && steps.length ? Math.round(((safeStepIndex + 1) / steps.length) * 100) : 0;
   const emergency = needsEmergency(values);
 
   useEffect(() => {
-    const subscription = form.watch((currentValues) => {
-      localStorage.setItem(draftKey, JSON.stringify({ quoteType: selectedType, stepIndex, values: currentValues }));
-    });
-    return () => subscription.unsubscribe();
-  }, [form, selectedType, stepIndex]);
+    const draft = readDraft();
+    const draftType = validQuoteTypes.includes(draft?.quoteType) ? draft.quoteType : "";
+
+    if (draftType) {
+      setSelectedType(draftType);
+      setStepIndex(clampStep(draftType, draft.stepIndex));
+      form.reset({ ...defaultQuoteValues, ...(draft.values || {}), quoteType: draftType });
+    } else {
+      form.reset(defaultQuoteValues);
+    }
+
+    setHydrated(true);
+  }, [form]);
 
   useEffect(() => {
-    localStorage.setItem(draftKey, JSON.stringify({ quoteType: selectedType, stepIndex, values }));
-  }, [selectedType, stepIndex, values]);
+    if (!hydrated) return;
+    const subscription = form.watch((currentValues) => {
+      writeDraft({ quoteType: selectedType, stepIndex: clampStep(selectedType, stepIndex), values: currentValues });
+    });
+    return () => subscription.unsubscribe();
+  }, [form, hydrated, selectedType, stepIndex]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeDraft({ quoteType: selectedType, stepIndex: clampStep(selectedType, stepIndex), values });
+  }, [hydrated, selectedType, stepIndex, values]);
+
+  useEffect(() => {
+    if (selectedType && safeStepIndex !== stepIndex) {
+      setStepIndex(safeStepIndex);
+    }
+  }, [safeStepIndex, selectedType, stepIndex]);
 
   const selectType = (type) => {
+    if (!validQuoteTypes.includes(type)) return;
     setSelectedType(type);
     form.setValue("quoteType", type, { shouldValidate: true });
     setStepIndex(0);
@@ -117,7 +177,7 @@ export default function QuoteWizard() {
   const goNext = async () => {
     const valid = await validateStep();
     if (!valid) return;
-    setStepIndex((current) => Math.min(current + 1, steps.length - 1));
+    setStepIndex((current) => Math.min(current + 1, Math.max(steps.length - 1, 0)));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -145,13 +205,36 @@ export default function QuoteWizard() {
 
     try {
       const response = await createQuote(payload);
-      localStorage.removeItem(draftKey);
+      clearDraft();
       setSubmitState({ status: "success", message: `Quote request ${response.publicId || "received"} is ready. We will respond as soon as possible.` });
     } catch {
-      localStorage.setItem(draftKey, JSON.stringify({ quoteType: selectedType, stepIndex, values: data, pendingSubmit: true }));
+      writeDraft({ quoteType: selectedType, stepIndex, values: data, pendingSubmit: true });
       setSubmitState({ status: "offline", message: "Saved offline on this device. Please call now if this is urgent." });
     }
   };
+
+  const resetWizard = () => {
+    clearDraft();
+    setSelectedType("");
+    setStepIndex(0);
+    form.reset(defaultQuoteValues);
+    setSubmitState({ status: "idle", message: "" });
+  };
+
+  if (!hydrated) {
+    return (
+      <section className="quote-experience" aria-labelledby="quote-title">
+        <QuoteHero />
+        <div className="quote-shell">
+          <div className="quote-card">
+            <span className="eyebrow">Loading quote assistant</span>
+            <h2>Preparing your saved progress</h2>
+            <p className="quote-muted">This should only take a moment.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="quote-experience" aria-labelledby="quote-title">
@@ -172,9 +255,15 @@ export default function QuoteWizard() {
         <div className="quote-card">
           {!selectedType ? (
             <QuoteTypeSelection selectedType={selectedType} onSelect={selectType} />
+          ) : !currentStep ? (
+            <div className="quote-step-content">
+              <h2>Quote step unavailable</h2>
+              <p className="quote-muted">Your saved draft used an older quote step. Start again and the assistant will save a fresh version.</p>
+              <Button type="button" onClick={resetWizard}>Restart quote</Button>
+            </div>
           ) : (
             <form onSubmit={form.handleSubmit(submitQuote)}>
-              <QuoteStepper steps={steps} stepIndex={stepIndex} progress={progress} />
+              <QuoteStepper steps={steps} stepIndex={safeStepIndex} progress={progress} />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep.id}
@@ -191,7 +280,7 @@ export default function QuoteWizard() {
                 </motion.div>
               </AnimatePresence>
               <div className="quote-mobile-actions">
-                <Button type="button" variant="outline" onClick={goBack} disabled={stepIndex === 0}>
+                <Button type="button" variant="outline" onClick={goBack} disabled={safeStepIndex === 0}>
                   <ArrowLeft size={18} aria-hidden="true" /> Previous
                 </Button>
                 {currentStep.id === "review" ? (
@@ -203,6 +292,9 @@ export default function QuoteWizard() {
                     Next <ArrowRight size={18} aria-hidden="true" />
                   </Button>
                 )}
+                <Button type="button" variant="outline" onClick={resetWizard}>
+                  Restart
+                </Button>
               </div>
             </form>
           )}
@@ -242,7 +334,7 @@ function QuoteTypeSelection({ selectedType, onSelect }) {
       <p className="quote-muted">Choose one installation route. Your progress will auto-save on this device.</p>
       <div className="quote-type-grid">
         {quoteTypes.map((type) => {
-          const Icon = type.id === "boiler" ? Flame : Bath;
+          const Icon = type.id === "boiler" ? Flame : type.id === "bathroom" ? Bath : Wrench;
           return (
             <motion.button
               type="button"

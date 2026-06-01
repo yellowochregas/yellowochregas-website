@@ -1,5 +1,5 @@
-const crypto = require("crypto");
 const mongoose = require("mongoose");
+const security = require("../utils/security");
 
 const adminUserSchema = new mongoose.Schema(
   {
@@ -13,11 +13,11 @@ const adminUserSchema = new mongoose.Schema(
 );
 
 adminUserSchema.statics.hashPassword = function hashPassword(password) {
-  return crypto.createHash("sha256").update(`${process.env.PASSWORD_PEPPER || "yellow-ochre"}:${password}`).digest("hex");
+  return security.hashPassword(password);
 };
 
 adminUserSchema.methods.verifyPassword = function verifyPassword(password) {
-  return this.passwordHash === this.constructor.hashPassword(password);
+  return security.verifyPassword(password, this.passwordHash);
 };
 
 module.exports = mongoose.model("AdminUser", adminUserSchema);

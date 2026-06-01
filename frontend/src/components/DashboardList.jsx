@@ -14,6 +14,7 @@ export function JobCard({ job, actions }) {
         <div><dt>Postcode</dt><dd>{job.postcode || job.location || "Pending"}</dd></div>
         <div><dt>Customer</dt><dd>{job.customer?.name || job.customerName || "Customer"}</dd></div>
         <div><dt>Phone</dt><dd>{job.customer?.phone || job.phone || "Not shared"}</dd></div>
+        {job.engineer && <div><dt>Engineer</dt><dd>{job.engineer.name || "Assigned"}</dd></div>}
       </dl>
       <div className="job-actions">
         {(job.customer?.phone || job.phone) && (

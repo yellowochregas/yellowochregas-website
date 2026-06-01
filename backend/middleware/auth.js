@@ -1,32 +1,57 @@
-const crypto = require("crypto");
+const { signToken, verifyToken } = require("../utils/security");
 
-const sessions = new Map();
-
-function createSession(adminUser) {
-  const token = crypto.randomBytes(32).toString("hex");
-  sessions.set(token, {
-    adminId: adminUser._id.toString(),
-    email: adminUser.email,
-    role: adminUser.role,
-    createdAt: Date.now()
+function createAuthToken(user, role) {
+  return signToken({
+    sub: user._id.toString(),
+    role,
+    email: user.email,
+    name: user.name
   });
-  return token;
 }
 
-function requireAdmin(req, res, next) {
+function readBearer(req) {
   const header = req.get("authorization") || "";
-  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
-  const session = sessions.get(token);
+  return header.startsWith("Bearer ") ? header.slice(7) : "";
+}
 
-  if (!session) {
-    return res.status(401).json({ message: "Admin authentication required" });
+function requireAuth(req, res, next) {
+  const token = readBearer(req);
+  const payload = verifyToken(token);
+
+  if (!payload) {
+    return res.status(401).json({ message: "Authentication required" });
   }
 
-  req.admin = session;
+  req.auth = {
+    userId: payload.sub,
+    role: payload.role,
+    email: payload.email,
+    name: payload.name
+  };
   return next();
 }
 
+function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!req.auth) {
+      return requireAuth(req, res, () => requireRole(...roles)(req, res, next));
+    }
+
+    if (!roles.includes(req.auth.role)) {
+      return res.status(403).json({ message: "You do not have permission to access this resource" });
+    }
+
+    return next();
+  };
+}
+
+function requireAdmin(req, res, next) {
+  return requireRole("ADMIN")(req, res, next);
+}
+
 module.exports = {
-  createSession,
-  requireAdmin
+  createAuthToken,
+  requireAdmin,
+  requireAuth,
+  requireRole
 };

@@ -2,10 +2,12 @@ require("dotenv").config();
 
 const connectDB = require("../config/db");
 const AdminUser = require("../models/AdminUser");
+const Customer = require("../models/Customer");
 const Engineer = require("../models/Engineer");
 const LocationPage = require("../models/LocationPage");
 const Review = require("../models/Review");
 const Service = require("../models/Service");
+const { hashPassword } = require("../utils/security");
 
 const areas = [
   "Braintree",
@@ -61,9 +63,29 @@ async function seed() {
       name: "Demo Gas Safe Engineer",
       phone: "+447593217699",
       email: "engineer@yellowochregas.local",
+      passwordHash: hashPassword(process.env.SEED_ENGINEER_PASSWORD || "engineer2024"),
       gasSafeNumber: "Demo Gas Safe profile",
       skills: ["Boiler", "Heating", "Plumbing"],
       active: true
+    },
+    { upsert: true }
+  );
+
+  await Customer.findOneAndUpdate(
+    { email: "customer@yellowochregas.local" },
+    {
+      name: "Demo Customer",
+      phone: "+447593217699",
+      email: "customer@yellowochregas.local",
+      passwordHash: hashPassword(process.env.SEED_CUSTOMER_PASSWORD || "customer2024"),
+      properties: [
+        {
+          addressLine1: "Demo address",
+          town: "Braintree",
+          postcode: "CM7 3DP",
+          propertyType: "House"
+        }
+      ]
     },
     { upsert: true }
   );

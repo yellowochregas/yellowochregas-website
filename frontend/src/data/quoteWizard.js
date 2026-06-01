@@ -12,6 +12,13 @@ export const quoteTypes = [
     eyebrow: "Premium finish",
     summary: "Plan a bathroom renovation with clear pricing and trade-quality workmanship.",
     image: "/images/Gas-engineer-at-work-in-kitchen.png"
+  },
+  {
+    id: "plumbing",
+    title: "Plumbing Service Request",
+    eyebrow: "Plain English help",
+    summary: "Request help for leaks, repairs, blocked drains, radiators, pipework, or not-sure problems.",
+    image: "/images/gas-safe-engineer.jpg"
   }
 ];
 
@@ -89,6 +96,33 @@ export const quoteSteps = {
       title: "Review and submit",
       fields: ["gdprConsent"]
     }
+  ],
+  plumbing: [
+    {
+      id: "personal",
+      title: "Personal details",
+      fields: ["fullName", "email", "phone", "postcode", "address"]
+    },
+    {
+      id: "serviceProblem",
+      title: "Problem details",
+      fields: ["serviceIssueType", "issueHappeningNow", "immediateRisk", "affectedArea"]
+    },
+    {
+      id: "servicePlanning",
+      title: "Visit planning",
+      fields: ["urgencyPreference", "accessLimitations", "parkingAvailability", "occupancyDuringWork"]
+    },
+    {
+      id: "additional",
+      title: "Additional notes",
+      fields: ["existingIssues", "photoNotes", "optionalNotes"]
+    },
+    {
+      id: "review",
+      title: "Review and submit",
+      fields: ["gdprConsent"]
+    }
   ]
 };
 
@@ -139,6 +173,11 @@ export const defaultQuoteValues = {
   photoNotes: "",
   optionalNotes: "",
   otherRequests: "",
+  serviceIssueType: "",
+  issueHappeningNow: "",
+  immediateRisk: "",
+  affectedArea: "",
+  urgencyPreference: "",
   gdprConsent: false
 };
 
@@ -187,5 +226,10 @@ export const fieldConfig = {
   specialRequirements: { label: "Special requirements", type: "textarea", placeholder: "Brand preferences, access needs, landlord deadlines, or other notes" },
   photoNotes: { label: "Upload photos option", type: "textarea", placeholder: "Describe the photos you can share, such as boiler, bathroom, pipework, or access" },
   optionalNotes: { label: "Optional notes", type: "textarea", placeholder: "Anything else we should know" },
-  otherRequests: { label: "Other requests", type: "textarea", placeholder: "Anything else you want included" }
+  otherRequests: { label: "Other requests", type: "textarea", placeholder: "Anything else you want included" },
+  serviceIssueType: { label: "What do you need help with?", type: "select", options: ["Water leak", "Blocked drain", "Radiator problem", "Pipework repair", "Tap or toilet issue", "Not sure"] },
+  issueHappeningNow: { label: "Is it happening right now?", type: "select", options: ["Yes", "No", "Not sure"] },
+  immediateRisk: { label: "Is there immediate risk?", type: "select", options: ["No", "Water near electrics", "Vulnerable household", "Commercial emergency", "Not sure"] },
+  affectedArea: { label: "Affected area", type: "select", options: ["Kitchen", "Bathroom", "Toilet", "Utility room", "Radiators", "Whole property", "Commercial premises", "Not sure"] },
+  urgencyPreference: { label: "When do you need help?", type: "select", options: ["Emergency", "Today", "Tomorrow", "This week", "Flexible"] }
 };

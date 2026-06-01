@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const connectDB = require("./config/db");
 const adminRoutes = require("./routes/adminRoutes");
+const authRoutes = require("./routes/authRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const engineerRoutes = require("./routes/engineerRoutes");
@@ -27,6 +28,7 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, service: "Yellow Ochre Gas API" });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/quotes", quoteRoutes);
 app.use("/api/customers", customerRoutes);
