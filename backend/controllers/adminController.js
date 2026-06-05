@@ -8,15 +8,16 @@ const QuoteRequest = require("../models/QuoteRequest");
 const Review = require("../models/Review");
 const { createAuthToken } = require("../middleware/auth");
 
-async function login(req, res, next) {
+async function login(req, res, next) {   
   try {
     const { email, password } = req.body;
     const admin = await AdminUser.findOne({ email: String(email).toLowerCase(), active: true });
+    console.log('User found:', user); // Debugging line to check if the user is found
     if (!admin || !admin.verifyPassword(password)) {
       return res.status(401).json({ message: "Invalid admin credentials" });
     }
 
-    const token = createAuthToken(admin, "ADMIN");
+    const token = createAuthToken(admin, "ADMIN"); 
     return res.json({ token, admin: { email: admin.email, name: admin.name, role: admin.role } });
   } catch (error) {
     return next(error);
