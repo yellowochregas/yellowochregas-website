@@ -16,14 +16,14 @@ const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigin = process.env.CLIENT_ORIGIN || ["http://localhost:3000", "https://www.yelloworchregas.co.uk", "https://www.yellowochregas.co.uk", "https://yellowochregas-website-3gv58udgj-yellowochregas-2591s-projects.vercel.app/"];
+const allowedOrigin = ["http://localhost:3000", "https://www.yelloworchregas.co.uk", "https://yellowochregas.co.uk", "https://yellowochregas-website.vercel.app", "https://yellowochregas-website-3gv58udgj-yellowochregas-2591s-projects.vercel.app"];
 
 app.use(helmet());
 
 //app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigin.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
