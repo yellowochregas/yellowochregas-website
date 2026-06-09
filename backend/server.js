@@ -16,7 +16,7 @@ const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigin = process.env.CLIENT_ORIGIN || "http://localhost:3000";
+const allowedOrigin = process.env.CLIENT_ORIGIN || ["http://localhost:3000", "https://www.yelloworchregas.co.uk"];
 
 app.use(helmet());
 app.use(cors({ origin: allowedOrigin, credentials: true }));
