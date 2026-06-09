@@ -18,10 +18,21 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const allowedOrigin = ["http://localhost:3000", "https://www.yelloworchregas.co.uk", "https://yellowochregas.co.uk", "https://yellowochregas-website.vercel.app", "https://yellowochregas-website-3gv58udgj-yellowochregas-2591s-projects.vercel.app"];
 
-app.use(helmet());
 
 //app.use(cors({ origin: allowedOrigin, credentials: true }));
-app.use(cors({
+// app.use(cors({
+//   origin: function(origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       return callback(null, true);
+//     }
+//     return callback(new Error('Not allowed by CORS'));
+//   },
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
+const corsOptions = {
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -29,9 +40,17 @@ app.use(cors({
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+// ✅ Handle preflight OPTIONS requests across all routes
+app.options('*', cors(corsOptions)); // preflight first
+
+// ✅ Apply CORS before helmet and everything else
+app.use(cors(corsOptions)); // cors second
+app.use(helmet()); // helmet third
+
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
