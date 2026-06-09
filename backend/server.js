@@ -45,7 +45,7 @@ const corsOptions = {
 };
 
 // ✅ Handle preflight OPTIONS requests across all routes
-app.options('*', cors(corsOptions)); // preflight first
+app.options('(.*)', cors(corsOptions)); // preflight first
 
 // ✅ Apply CORS before helmet and everything else
 app.use(cors(corsOptions)); // cors second
