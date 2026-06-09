@@ -16,10 +16,23 @@ const { errorHandler, notFound } = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigin = process.env.CLIENT_ORIGIN || ["http://localhost:3000", "https://www.yelloworchregas.co.uk"];
+const allowedOrigin = process.env.CLIENT_ORIGIN || ["http://localhost:3000", "https://www.yelloworchregas.co.uk", "https://www.yellowochregas.co.uk", "https://yellowochregas-website-3gv58udgj-yellowochregas-2591s-projects.vercel.app/"];
 
 app.use(helmet());
-app.use(cors({ origin: allowedOrigin, credentials: true }));
+
+//app.use(cors({ origin: allowedOrigin, credentials: true }));
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 120 }));
