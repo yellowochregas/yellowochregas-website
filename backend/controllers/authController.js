@@ -21,6 +21,7 @@ function publicUser(user, role) {
 }
 
 async function login(req, res, next) {
+  console.log("LOGIN REQUEST:", req.body);
   try {
     const role = String(req.body.role || "").toUpperCase();
     const email = String(req.body.email || "").toLowerCase().trim();
