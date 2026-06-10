@@ -41,6 +41,7 @@ async function login(req, res, next) {
       user: publicUser(user, role)
     });
   } catch (error) {
+    console.error("LOGIN ERROR:", error);
     return next(error);
   }
 }
