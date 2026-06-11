@@ -42,6 +42,12 @@ async function login(req, res, next) {
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
+     // ⚠️ TEMPORARY — remove after debugging
+  return res.status(500).json({ 
+    message: "Login error", 
+    error: error.message,
+    stack: error.stack 
+  });
     return next(error);
   }
 }
