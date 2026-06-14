@@ -25,23 +25,23 @@ const allowedOrigin = ["http://localhost:3000",
 
 
 // TEMPORARY — catches any crash before Express handles it
-process.on('uncaughtException', (error) => {
-  console.error('UNCAUGHT EXCEPTION:', error.message, error.stack);
-});
+// process.on('uncaughtException', (error) => {
+//   console.error('UNCAUGHT EXCEPTION:', error.message, error.stack);
+// });
 
-process.on('unhandledRejection', (reason) => {
-  console.error('UNHANDLED REJECTION:', reason);
-});
+// process.on('unhandledRejection', (reason) => {
+//   console.error('UNHANDLED REJECTION:', reason);
+// });
 
-// TEMPORARY — test password verification on startup
-const { hashPassword, verifyPassword } = require('./utils/security');
-try {
-  const testHash = hashPassword('testpassword');
-  const testVerify = verifyPassword('testpassword', testHash);
-  console.log('PASSWORD SYSTEM OK:', testVerify);
-} catch (err) {
-  console.error('PASSWORD SYSTEM FAILED:', err.message);
-}
+// // TEMPORARY — test password verification on startup
+// const { hashPassword, verifyPassword } = require('./utils/security');
+// try {
+//   const testHash = hashPassword('testpassword');
+//   const testVerify = verifyPassword('testpassword', testHash);
+//   console.log('PASSWORD SYSTEM OK:', testVerify);
+// } catch (err) {
+//   console.error('PASSWORD SYSTEM FAILED:', err.message);
+// }
 
 
 
@@ -180,6 +180,61 @@ app.get("/api/health", (req, res) => {
 //   console.log("INCOMING:", req.method, req.url);
 //   next();
 // });
+
+app.get("/api/test-login", async (req, res) => {
+  const results = {};
+  
+  try {
+    // Step 1: Test DB connection
+    const mongoose = require("mongoose");
+    results.dbState = mongoose.connection.readyState;
+    results.dbConnected = mongoose.connection.readyState === 1;
+
+    // Step 2: Test finding admin user
+    const AdminUser = require("./models/AdminUser");
+    const user = await AdminUser.findOne({ 
+      email: "admin@yellowochregas.local" 
+    });
+    results.userFound = !!user;
+    results.hasPasswordHash = !!(user && user.passwordHash);
+    results.passwordHashPrefix = user?.passwordHash?.substring(0, 10);
+
+    // Step 3: Test password verification
+    if (user && user.passwordHash) {
+      const { verifyPassword } = require("./utils/security");
+      try {
+        const valid = verifyPassword("yellowochre2024", user.passwordHash);
+        results.passwordValid = valid;
+      } catch (pwErr) {
+        results.passwordError = pwErr.message;
+      }
+    }
+
+    // Step 4: Test token creation
+    if (results.passwordValid) {
+      const { createAuthToken } = require("./middleware/auth");
+      try {
+        const token = createAuthToken(user, "ADMIN");
+        results.tokenCreated = !!token;
+        results.tokenPrefix = token?.substring(0, 20);
+      } catch (tokenErr) {
+        results.tokenError = tokenErr.message;
+      }
+    }
+
+    return res.json({ success: true, results });
+
+  } catch (error) {
+    return res.json({ 
+      success: false, 
+      failedAt: Object.keys(results).join(", ") || "startup",
+      error: error.message,
+      stack: error.stack,
+      results 
+    });
+  }
+});
+
 
 
 app.use("/api/auth", authRoutes);
