@@ -9,6 +9,31 @@ const CORE_ASSETS = [
   "/images/icons8-google.svg"
 ];
 
+
+// In your service-worker.js
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
+  // ✅ Never intercept API calls — let them go directly to Render
+  if (url.hostname === 'yellowochregas-website.onrender.com') {
+    return; // bypass service worker entirely for API calls
+  }
+  
+  // ✅ Never intercept non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Handle other requests normally
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
+});
+
+
+
 async function putIfValid(request, response) {
   if (!response || response.status !== 200 || response.type === "opaque") return response;
   const cache = await caches.open(CACHE_NAME);

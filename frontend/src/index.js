@@ -12,7 +12,7 @@ root.render(
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js").catch(() => {
+    navigator.serviceWorker.unregister("/service-worker.js").catch(() => {
       // The app still works without offline support in unsupported local contexts.
     });
   });
