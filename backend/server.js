@@ -61,6 +61,18 @@ const allowedOrigin = ["http://localhost:3000",
 // };
 
 
+// TEMPORARY — add after require("dotenv").config();
+app.get("/api/debug-env", (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    hasMongoDUri: !!process.env.MONGODB_URI,
+    hasJwtSecret: !!process.env.JWT_SECRET,
+    hasPepper: !!process.env.PASSWORD_PEPPER,
+    nodeEnv: process.env.NODE_ENV,
+    port: process.env.PORT
+  });
+});
+
 const corsOptions = {
   origin: function(origin, callback) {
     //console.log("CORS ORIGIN RECEIVED:", JSON.stringify(origin));
