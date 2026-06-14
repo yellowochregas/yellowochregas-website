@@ -20,32 +20,87 @@ function publicUser(user, role) {
   };
 }
 
+// async function login(req, res, next) {
+//   //console.log("LOGIN REQUEST:", req.body);
+//   try {
+//     const role = String(req.body.role || "").toUpperCase();
+//     const email = String(req.body.email || "").toLowerCase().trim();
+//     const password = String(req.body.password || "");
+
+//     if (!roleModels[role]) {
+//       return res.status(400).json({ message: "Valid role is required" });
+//     }
+
+//     const user = await roleModels[role].findOne({ email, active: { $ne: false } });
+//     if (!user || !user.passwordHash || !verifyPassword(password, user.passwordHash)) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+
+//     return res.json({
+//       token: createAuthToken(user, role),
+//       user: publicUser(user, role)
+//     });
+//   } catch (error) {
+//     console.error("LOGIN ERROR:", error);
+//     return next(error);
+//   }
+// }
+
+
+
 async function login(req, res, next) {
-  //console.log("LOGIN REQUEST:", req.body);
   try {
     const role = String(req.body.role || "").toUpperCase();
     const email = String(req.body.email || "").toLowerCase().trim();
     const password = String(req.body.password || "");
 
+    // ✅ Test DB connection first
+    const mongoose = require("mongoose");
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ 
+        message: "Database not connected",
+        state: mongoose.connection.readyState
+      });
+    }
+
     if (!roleModels[role]) {
       return res.status(400).json({ message: "Valid role is required" });
     }
 
-    const user = await roleModels[role].findOne({ email, active: { $ne: false } });
-    if (!user || !user.passwordHash || !verifyPassword(password, user.passwordHash)) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    const user = await roleModels[role].findOne({ 
+      email, 
+      active: { $ne: false } 
+    });
+
+    if (!user) {
+      return res.status(401).json({ 
+        message: "Those details did not match an active Yellow Ochre Gas account.",
+        debug: `No ${role} found with email ${email}`
+      });
+    }
+
+    const passwordValid = verifyPassword(password, user.passwordHash);
+
+    if (!passwordValid) {
+      return res.status(401).json({ 
+        message: "Those details did not match an active Yellow Ochre Gas account.",
+        debug: "Password mismatch"
+      });
     }
 
     return res.json({
       token: createAuthToken(user, role),
       user: publicUser(user, role)
     });
+
   } catch (error) {
-    console.error("LOGIN ERROR:", error);
-    return next(error);
+    return res.status(500).json({ 
+      message: "Login error",
+      debug: error.message,
+      type: error.constructor.name
+    });
   }
 }
-
 
 
 // async function login(req, res, next) {

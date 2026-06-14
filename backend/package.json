@@ -24,7 +24,7 @@
     "ee-first": "^1.1.1",
     "encodeurl": "^2.0.0",
     "etag": "^1.8.1",
-    "express": "^4.22.2",
+    "express": "^4.21.2",
     "express-rate-limit": "^8.2.1",
     "finalhandler": "^2.1.1",
     "forwarded": "^0.2.0",
