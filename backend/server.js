@@ -23,6 +23,28 @@ const allowedOrigin = ["http://localhost:3000",
                        "https://yellowochregas-website-3gv58udgj-yellowochregas-2591s-projects.vercel.app"];
 
 
+
+// TEMPORARY — catches any crash before Express handles it
+process.on('uncaughtException', (error) => {
+  console.error('UNCAUGHT EXCEPTION:', error.message, error.stack);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason);
+});
+
+// TEMPORARY — test password verification on startup
+const { hashPassword, verifyPassword } = require('./utils/security');
+try {
+  const testHash = hashPassword('testpassword');
+  const testVerify = verifyPassword('testpassword', testHash);
+  console.log('PASSWORD SYSTEM OK:', testVerify);
+} catch (err) {
+  console.error('PASSWORD SYSTEM FAILED:', err.message);
+}
+
+
+
 // ✅ Add THIS as the very first middleware — before cors, helmet, rateLimit, everything
 // app.use((req, res, next) => {
 //   console.log("INCOMING:", req.method, req.url);

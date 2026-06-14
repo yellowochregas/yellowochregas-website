@@ -20,35 +20,8 @@ function publicUser(user, role) {
   };
 }
 
-// async function login(req, res, next) {
-//   //console.log("LOGIN REQUEST:", req.body);
-//   try {
-//     const role = String(req.body.role || "").toUpperCase();
-//     const email = String(req.body.email || "").toLowerCase().trim();
-//     const password = String(req.body.password || "");
-
-//     if (!roleModels[role]) {
-//       return res.status(400).json({ message: "Valid role is required" });
-//     }
-
-//     const user = await roleModels[role].findOne({ email, active: { $ne: false } });
-//     if (!user || !user.passwordHash || !verifyPassword(password, user.passwordHash)) {
-//       return res.status(401).json({ message: "Invalid credentials" });
-//     }
-
-//     return res.json({
-//       token: createAuthToken(user, role),
-//       user: publicUser(user, role)
-//     });
-//   } catch (error) {
-//     console.error("LOGIN ERROR:", error);
-//     return next(error);
-//   }
-// }
-
-
-
 async function login(req, res, next) {
+  //console.log("LOGIN REQUEST:", req.body);
   try {
     const role = String(req.body.role || "").toUpperCase();
     const email = String(req.body.email || "").toLowerCase().trim();
@@ -59,65 +32,92 @@ async function login(req, res, next) {
     }
 
     const user = await roleModels[role].findOne({ email, active: { $ne: false } });
-
-    if (!user) {
-      // ⚠️ TEMPORARY — reveals whether user exists
-      return res.status(401).json({ 
-        message: "Invalid credentials",
-        debug: "no user found",
-        email,
-        role
-      });
-    }
-
-    if (!user.passwordHash) {
-      return res.status(401).json({ 
-        message: "Invalid credentials",
-        debug: "no password hash on user"
-      });
-    }
-
-    let passwordValid;
-    try {
-      passwordValid = verifyPassword(password, user.passwordHash);
-    } catch (pwErr) {
-      return res.status(500).json({ 
-        message: "Password verification failed",
-        debug: pwErr.message
-      });
-    }
-
-    if (!passwordValid) {
-      return res.status(401).json({ 
-        message: "Invalid credentials",
-        debug: "password mismatch"
-      });
-    }
-
-    let token;
-    try {
-      token = createAuthToken(user, role);
-    } catch (tokenErr) {
-      return res.status(500).json({ 
-        message: "Token creation failed",
-        debug: tokenErr.message
-      });
+    if (!user || !user.passwordHash || !verifyPassword(password, user.passwordHash)) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     return res.json({
-      token,
+      token: createAuthToken(user, role),
       user: publicUser(user, role)
     });
-
   } catch (error) {
-    // ⚠️ TEMPORARY — reveals exact crash reason
-    return res.status(500).json({ 
-      message: "Login error",
-      debug: error.message,
-      stack: error.stack
-    });
+    console.error("LOGIN ERROR:", error);
+    return next(error);
   }
 }
+
+
+
+// async function login(req, res, next) {
+//   try {
+//     const role = String(req.body.role || "").toUpperCase();
+//     const email = String(req.body.email || "").toLowerCase().trim();
+//     const password = String(req.body.password || "");
+
+//     if (!roleModels[role]) {
+//       return res.status(400).json({ message: "Valid role is required" });
+//     }
+
+//     const user = await roleModels[role].findOne({ email, active: { $ne: false } });
+
+//     if (!user) {
+//       // ⚠️ TEMPORARY — reveals whether user exists
+//       return res.status(401).json({ 
+//         message: "Invalid credentials",
+//         debug: "no user found",
+//         email,
+//         role
+//       });
+//     }
+
+//     if (!user.passwordHash) {
+//       return res.status(401).json({ 
+//         message: "Invalid credentials",
+//         debug: "no password hash on user"
+//       });
+//     }
+
+//     let passwordValid;
+//     try {
+//       passwordValid = verifyPassword(password, user.passwordHash);
+//     } catch (pwErr) {
+//       return res.status(500).json({ 
+//         message: "Password verification failed",
+//         debug: pwErr.message
+//       });
+//     }
+
+//     if (!passwordValid) {
+//       return res.status(401).json({ 
+//         message: "Invalid credentials",
+//         debug: "password mismatch"
+//       });
+//     }
+
+//     let token;
+//     try {
+//       token = createAuthToken(user, role);
+//     } catch (tokenErr) {
+//       return res.status(500).json({ 
+//         message: "Token creation failed",
+//         debug: tokenErr.message
+//       });
+//     }
+
+//     return res.json({
+//       token,
+//       user: publicUser(user, role)
+//     });
+
+//   } catch (error) {
+//     // ⚠️ TEMPORARY — reveals exact crash reason
+//     return res.status(500).json({ 
+//       message: "Login error",
+//       debug: error.message,
+//       stack: error.stack
+//     });
+//   }
+// }
 
 
 
