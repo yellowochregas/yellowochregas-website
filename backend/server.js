@@ -181,6 +181,15 @@ app.get("/api/health", (req, res) => {
 //   next();
 // });
 
+
+app.post("/api/test-post", (req, res) => {
+  res.json({ 
+    body: req.body,
+    contentType: req.headers['content-type'],
+    bodyDefined: req.body !== undefined
+  });
+});
+
 app.get("/api/test-login", async (req, res) => {
   const results = {};
   
